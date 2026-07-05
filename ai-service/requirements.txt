@@ -1,3 +1,12 @@
 fastapi
 uvicorn
 faster-whisper
+tensorflow==2.16.1
+tensorflow-hub
+tensorflow-io
+numpy
+librosa
+soundfile
+scipy
+pandas
+python-multipart
