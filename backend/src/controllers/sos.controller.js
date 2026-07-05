@@ -3,11 +3,15 @@ const WorkflowService = require("../services/emergencyWorkflow.service");
 
 const triggerSOS = async (req, res) => {
     try{
-        const {triggerType} = req.body;
-        const incident = IncidentService.createIncident(triggerType);
+        const {triggerType,latitude,longitude} = req.body;
+        const incident = IncidentService.createIncident(
+            triggerType,
+            latitude,
+            longitude
+        );
 
         await WorkflowService.startWorkflow(incident);
-        
+
         return res.status(201).json({
             success:true,
             message: "SOS Triggered Succesfully",

@@ -1,5 +1,10 @@
+
 const client = require("../integrations/twilio.client");
+
 const sendSMS = async (incident) => {
+    const mapsLink =
+`https://www.google.com/maps?q=${incident.latitude},${incident.longitude}`;
+
     const message = `
     HER SHIELD SOS ALERT
 
@@ -9,6 +14,9 @@ Trigger: ${incident.triggerType}
 
 Incident ID:
 ${incident.id}
+
+Location:
+${mapsLink}
 
 Status:
 ${incident.status}
