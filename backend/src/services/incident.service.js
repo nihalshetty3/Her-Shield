@@ -8,7 +8,7 @@ const VALID_TRIGGERS = [
     "wearable"
 ];
 
-const createIncident = (triggerType) =>{
+const createIncident = (triggerType ,latitude , longitude) =>{
     if(!VALID_TRIGGERS.includes(triggerType)){
         throw new Error("Invalid Trigger Type");
     }
@@ -17,6 +17,8 @@ const createIncident = (triggerType) =>{
         id : crypto.randomUUID(),
         triggerType,
         status: "ACTIVE",
+        latitude,
+        longitude,
         createdAt: new Date()
     };
 
