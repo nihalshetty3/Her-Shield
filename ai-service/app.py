@@ -19,12 +19,22 @@ async def detect_voice(file: UploadFile = File(...)):
     transcription = transcribe(path)
     keyword_result = detect_keywords(transcription)
     risk = calculate_risk(keyword_result["score"])
-    text = transcribe(path)
-    detected = detect_keyword(text)
     
-    return {
+    incident={
+       "triggerType": "VOICE",
+       "transcription": transcription,
+       "keywordScore": keyword_result["score"],
+       "risk": risk
+    }
+    
+    analysis = analyze_incident(incident)
+   
+    response=build_response(
         transcription,
         keyword_result["matched"],
         keyword_result["score"],
         risk
-    }
+    )
+    
+    response["analysis"]=analysis
+    return response
