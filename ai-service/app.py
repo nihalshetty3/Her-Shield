@@ -9,6 +9,7 @@ from services.response_service import build_response
 from services.scream_service import detect_scream
 from services.analyzer_service import analyze_incident
 from services.decision_service import should_trigger_sos
+from services.ai_decision_service import ai_should_trigger_sos
 
 app=FastAPI()
 
@@ -26,7 +27,21 @@ async def detect_voice(file: UploadFile = File(...)):
     keyword_result = detect_keywords(transcription)
     risk = calculate_risk(keyword_result["score"])
     scream_result = detect_scream(path)
-    trigger_sos = should_trigger_sos(risk , scream_result)
+    
+    try:
+        ai_decision=ai_should_trigger_sos(incident)
+        trigger_sos = ai_decision["triggerSOS"]
+    
+    except Exception:
+        trigger_sos = should_trigger_sos(
+            risk,
+            scream_result
+        )
+        ai_decision = {
+            "triggerSOS": trigger_sos,
+            "confidence": 0,
+            "reason": "FallBack Rule Engine"
+        }
     
     incident={
        "triggerType": "VOICE",
@@ -48,5 +63,5 @@ async def detect_voice(file: UploadFile = File(...)):
     response["screamDetection"]=scream_result
     response["analysis"]=analysis
     response["triggerSOS"]=trigger_sos
-    
+    response["aiDecision"]=ai_decision
     return response
