@@ -11,6 +11,7 @@ from services.analyzer_service import analyze_incident
 from services.decision_service import should_trigger_sos
 from services.ai_decision_service import ai_should_trigger_sos
 from services.fake_sos_service import detect_fake_sos
+from services.context_service import build_context
 
 app=FastAPI()
 
@@ -31,6 +32,13 @@ async def detect_voice(file: UploadFile = File(...)):
     risk = calculate_risk(keyword_result["score"])
     scream_result = detect_scream(path)
     
+    incident=build_context(
+        transcription,
+        keyword_result,
+        risk,
+        scream_result
+    )
+    
     try:
         ai_decision=ai_should_trigger_sos(incident)
         if not fake_result["isEmergency"]:
@@ -49,13 +57,6 @@ async def detect_voice(file: UploadFile = File(...)):
             "reason": "FallBack Rule Engine"
         }
     
-    incident={
-       "triggerType": "VOICE",
-       "transcription": transcription,
-       "keywordScore": keyword_result["score"],
-       "risk": risk,
-       "screamDetection": scream_result
-    }
     
     analysis = analyze_incident(incident)
     
