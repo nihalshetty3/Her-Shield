@@ -78,17 +78,11 @@ function App() {
           </p>
         </section>
 
-        {/* Central Glowing Orb representation of AI */}
         <section className="flex flex-col items-center justify-center my-8 relative">
           <AuraCore />
           <p className="text-[11px] tracking-[0.3em] uppercase text-pink-100/40 mt-4 animate-pulse">
             Tap core to simulate quick SOS
           </p>
-          <div 
-            onClick={triggerSos}
-            className="absolute inset-0 cursor-pointer rounded-full" 
-            title="Simulate SOS alert"
-          />
         </section>
 
         {/* Asymmetrical Floating Cards Grid */}
