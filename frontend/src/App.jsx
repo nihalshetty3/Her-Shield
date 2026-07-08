@@ -16,6 +16,7 @@ import GestureVisual from './components/GestureVisual';
 import VoiceVisual from './components/VoiceVisual';
 import SosButton from './components/SosButton';
 import SosOverlay from './components/SosOverlay';
+import AudioTestPanel from './components/AudioTestPanel';
 
 function App() {
   const [gestureActive, setGestureActive] = useState(false);
@@ -159,7 +160,10 @@ function App() {
 
         </section>
 
-        {/* Telemetry info and Shield Integrity */}
+        <section className="w-full mt-16 max-w-4xl">
+          <AudioTestPanel />
+        </section>
+
         <section className="w-full mt-24 max-w-4xl glass-panel p-8 rounded-[32px] border border-white/5 relative">
           {/* Inner highlights */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-pink-400/5 rounded-full blur-2xl" />
