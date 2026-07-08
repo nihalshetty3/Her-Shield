@@ -1,25 +1,30 @@
 import ollama
+import json
+
 
 SYSTEM_PROMPT = """
-You are an AI emergency response assistant.
+You are an intelligent emergency decision engine.
 
-Analyze the emergency incident and return ONLY valid JSON.
+Your task is to determine whether an SOS should be triggered.
+
+Use ALL available context.
+
+Return ONLY valid JSON.
 
 Format:
 
 {
-    "risk": "",
-    "summary": "",
-    "keywords": [],
-    "recommendedAction": ""
+    "triggerSOS": true,
+    "confidence": 95,
+    "reason": "Short explanation"
 }
 """
 
 
-def analyze_incident(incident):
+def ai_should_trigger_sos(incident):
 
     prompt = f"""
-Analyze the following emergency incident.
+Emergency Incident Context
 
 Trigger Type:
 {incident["triggerType"]}
@@ -42,7 +47,9 @@ Scream Detection:
 Incident Time:
 {incident["time"]}
 
-Generate ONLY valid JSON.
+Determine whether this is a genuine emergency.
+
+Return ONLY valid JSON.
 """
 
     response = ollama.chat(
@@ -59,4 +66,15 @@ Generate ONLY valid JSON.
         ]
     )
 
-    return response["message"]["content"]
+    content = response["message"]["content"]
+
+    try:
+        return json.loads(content)
+
+    except Exception:
+
+        return {
+            "triggerSOS": False,
+            "confidence": 0,
+            "reason": "AI returned invalid JSON."
+        }
