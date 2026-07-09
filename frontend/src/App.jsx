@@ -16,6 +16,7 @@ import GestureVisual from './components/GestureVisual';
 import VoiceVisual from './components/VoiceVisual';
 import SosButton from './components/SosButton';
 import SosOverlay from './components/SosOverlay';
+import AudioTestPanel from './components/AudioTestPanel';
 
 function App() {
   const [gestureActive, setGestureActive] = useState(false);
@@ -78,17 +79,11 @@ function App() {
           </p>
         </section>
 
-        {/* Central Glowing Orb representation of AI */}
         <section className="flex flex-col items-center justify-center my-8 relative">
           <AuraCore />
           <p className="text-[11px] tracking-[0.3em] uppercase text-pink-100/40 mt-4 animate-pulse">
             Tap core to simulate quick SOS
           </p>
-          <div 
-            onClick={triggerSos}
-            className="absolute inset-0 cursor-pointer rounded-full" 
-            title="Simulate SOS alert"
-          />
         </section>
 
         {/* Asymmetrical Floating Cards Grid */}
@@ -165,7 +160,10 @@ function App() {
 
         </section>
 
-        {/* Telemetry info and Shield Integrity */}
+        <section className="w-full mt-16 max-w-4xl">
+          <AudioTestPanel />
+        </section>
+
         <section className="w-full mt-24 max-w-4xl glass-panel p-8 rounded-[32px] border border-white/5 relative">
           {/* Inner highlights */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-pink-400/5 rounded-full blur-2xl" />

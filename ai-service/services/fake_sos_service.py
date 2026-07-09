@@ -1,58 +1,68 @@
 import ollama
 import json
 
+SYSTEM_PROMPT = """
+You are an intelligent emergency classifier.
 
-def detect_fake_sos(transcription):
+Analyze the complete incident.
+
+Use:
+- transcription
+- keyword score
+- risk
+- scream detection
+
+Determine if this is a real emergency.
+
+Return ONLY JSON.
+
+{
+    "isEmergency": true,
+    "confidence": 95,
+    "reason":"..."
+}
+"""
+
+
+def detect_fake_sos(incident):
 
     prompt = f"""
-You are an emergency AI.
+Transcription:
+{incident["transcription"]}
 
-Determine whether the following sentence is a REAL emergency or a NORMAL conversation.
+Risk:
+{incident["risk"]}
 
-Sentence:
-{transcription}
+Keyword Score:
+{incident["keywordScore"]}
 
-Examples:
-
-"Help me! Someone is following me."
-→ REAL
-
-"Don't touch me!"
-→ REAL
-
-"Please save me."
-→ REAL
-
-"Help me with my homework."
-→ FAKE
-
-"Can you help me carry this bag?"
-→ FAKE
-
-Return ONLY valid JSON.
-
-{{
-    "isEmergency": true,
-    "confidence": 98,
-    "reason": "..."
-}}
+Scream Detection:
+{incident["screamDetection"]}
 """
+
     response = ollama.chat(
         model="mistral:latest",
         messages=[
             {
+                "role":"system",
+                "content":SYSTEM_PROMPT
+            },
+            {
                 "role":"user",
-                "content": prompt
+                "content":prompt
             }
         ]
     )
-    
-    content = response ["messages"]["content"]
+
+    content = response["message"]["content"]
+
     try:
         return json.loads(content)
-    except:
+
+    except Exception:
+
         return {
             "isEmergency": True,
-            "confidence": 0,
-            "reason": "Unable to determine"
+            "confidence":0,
+            "reason":"Unable to classify."
         }

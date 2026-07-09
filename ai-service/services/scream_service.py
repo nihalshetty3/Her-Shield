@@ -11,7 +11,7 @@ DISTRESS_LABELS = {
     "Shout"
 }
 
-THRESHOLD = 0.30
+THRESHOLD = 0.10
 
 
 def detect_scream(audio_path):
@@ -27,6 +27,18 @@ def detect_scream(audio_path):
         if item["label"] in DISTRESS_LABELS:
             distress_score += item["confidence"]
             matched_labels.append(item)
+    
+    # this iterates over all 512 classes so nothing misses
+    
+    # for idx, score in enumerate(mean_scores):
+    #     label = class_names[idx]
+        
+    #     if label in DISTRESS_LABELS:
+    #         distress_scores += float(score)
+    #         matched_labels.append({
+    #             "label": label,
+    #             "confidence": round(float(score) , 4)
+    #         })
 
     return {
         "isScream": distress_score >= THRESHOLD,

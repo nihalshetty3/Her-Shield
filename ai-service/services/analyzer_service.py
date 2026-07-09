@@ -1,4 +1,5 @@
 import ollama
+import json
 
 SYSTEM_PROMPT = """
 You are an AI emergency response assistant.
@@ -59,4 +60,21 @@ Generate ONLY valid JSON.
         ]
     )
 
-    return response["message"]["content"]
+    content = response["message"]["content"].strip()
+
+    # Remove markdown code fences if Mistral returns them
+    if content.startswith("```json"):
+        content = content.replace("```json", "").replace("```", "").strip()
+    elif content.startswith("```"):
+        content = content.replace("```", "").strip()
+
+    try:
+        return json.loads(content)
+
+    except Exception:
+        return {
+            "risk": incident["risk"],
+            "summary": content,
+            "keywords": [],
+            "recommendedAction": "AI parsing failed"
+        }
