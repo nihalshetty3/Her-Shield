@@ -6,7 +6,7 @@ const AuraCore = () => {
 
   const handleClick = () => {
     setSosStatus('triggering');
-    fetch('http://localhost:5001/api/trigger-sos', {
+    fetch("http://localhost:5001/api/trigger-sos", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ source: 'aura-core-click' })
