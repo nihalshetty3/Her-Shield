@@ -62,7 +62,7 @@ def predict_audio(audio_path: str):
     confidence = float(mean_scores[best_index])
 
     # Top 5 predictions 
-    top5_idx = np.argsort(mean_scores)[::-1][:5]
+    top5_idx = np.argsort(mean_scores)[::-1][:15]
 
     top_predictions = [
         {
