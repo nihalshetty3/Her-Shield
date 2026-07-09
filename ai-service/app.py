@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 import os
 import shutil
-
+from pydantic import BaseModel
+from services.guardian_service import guardian_chat
 from services.whisper_service import transcribe
 from services.keyword_service import detect_keywords
 from services.risk_service import calculate_risk
@@ -13,21 +14,20 @@ from services.ai_decision_service import ai_should_trigger_sos
 from services.fake_sos_service import detect_fake_sos
 from services.context_service import build_context
 
+latest_incident = None
+
 app = FastAPI()
 
 os.makedirs("audio", exist_ok=True)
 
-
 @app.post("/voice/detect")
 async def detect_voice(file: UploadFile = File(...)):
 
-    # Save uploaded audio
     path = f"audio/{file.filename}"
 
     with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Speech to text
     transcription = transcribe(path)
 
     keyword_result = detect_keywords(transcription)
@@ -142,4 +142,35 @@ async def detect_voice(file: UploadFile = File(...)):
 
     print("=====================================\n")
 
+    global latest_incident
+    incident["analysis"]=analysis
+    latest_incident = incident
+    
+    print("\n========== INCIDENT SAVED ==========")
+    print(latest_incident)
+    
     return response
+
+class GuardianRequest(BaseModel):
+    question:str
+    
+@app.post(("/guardian/chat"))
+async def guardian_chat_endpoint(request: GuardianRequest):
+    
+    global latest_incident
+    if latest_incident is None:
+        return {
+            "answer": "No incident available"
+        }
+    
+    answer = guardian_chat(
+        latest_incident,
+        request.question
+    )
+    
+    print("\n========== GUARDIAN ANSWER ==========")
+    print(answer)
+     
+    return {
+         "answer": answer
+    }
