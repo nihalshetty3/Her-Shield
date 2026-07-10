@@ -1,7 +1,9 @@
 from fastapi import FastAPI, UploadFile, File
 import os
+import uuid
 import shutil
-
+from pydantic import BaseModel
+from services.guardian_service import guardian_chat
 from services.whisper_service import transcribe
 from services.keyword_service import detect_keywords
 from services.risk_service import calculate_risk
@@ -12,22 +14,26 @@ from services.decision_service import should_trigger_sos
 from services.ai_decision_service import ai_should_trigger_sos
 from services.fake_sos_service import detect_fake_sos
 from services.context_service import build_context
+from services.evidence_service import save_incident
+from fastapi.responses import FileResponse
+from services.evidence_service import load_incident
+from services.report_service import generate_report
+from services.pdf_service import create_pdf
+
+latest_incident = None
 
 app = FastAPI()
 
 os.makedirs("audio", exist_ok=True)
 
-
 @app.post("/voice/detect")
 async def detect_voice(file: UploadFile = File(...)):
 
-    # Save uploaded audio
     path = f"audio/{file.filename}"
 
     with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Speech to text
     transcription = transcribe(path)
 
     keyword_result = detect_keywords(transcription)
@@ -67,6 +73,20 @@ async def detect_voice(file: UploadFile = File(...)):
 
         analysis = analyze_incident(incident)
 
+        incident_record = {
+            "incidentId": str(uuid.uuid4()),
+            "time": incident["time"],
+            "transcription": transcription,
+            "keywords": keyword_result["matched"],
+            "keywordScore": keyword_result["score"],
+            "risk": risk,
+            "screamDetection": scream_result,
+            "analysis": analysis,
+            "aiDecision": ai_decision,
+            "fakeSOSDetection": fake_result
+        }
+        save_incident(incident_record)
+        
         if not fake_result["isEmergency"]:
             trigger_sos = False
         else:
@@ -107,7 +127,8 @@ async def detect_voice(file: UploadFile = File(...)):
     response["triggerSOS"] = trigger_sos
     response["aiDecision"] = ai_decision
     response["fakeSOSDetection"] = fake_result
-
+    response["incidentId"]= incident_record["incidentId"]
+    
     # ================= DEBUG LOGS =================
 
     print("\n========== TRANSCRIPTION ==========")
@@ -142,4 +163,58 @@ async def detect_voice(file: UploadFile = File(...)):
 
     print("=====================================\n")
 
+    global latest_incident
+    incident["analysis"]=analysis
+    latest_incident = incident
+    
+    print("\n========== INCIDENT SAVED ==========")
+    print(latest_incident)
+    
     return response
+
+class GuardianRequest(BaseModel):
+    question:str
+    
+@app.post(("/guardian/chat"))
+async def guardian_chat_endpoint(request: GuardianRequest):
+    
+    global latest_incident
+    if latest_incident is None:
+        return {
+            "answer": "No incident available"
+        }
+    
+    answer = guardian_chat(
+        latest_incident,
+        request.question
+    )
+    
+    print("\n========== GUARDIAN ANSWER ==========")
+    print(answer)
+     
+    return {
+         "answer": answer
+    }
+    
+@app.get("/report/{incident_id}")
+def generate_police_report(incident_id):
+    incident = load_incident(
+        incident_id
+    )
+    
+    if incident is None:
+        return {
+            "error":"Incident not found"
+        }
+    report = generate_report(
+        incident
+    )
+    pdf = create_pdf(
+        incident_id,
+        report
+    )
+    return FileResponse(
+        pdf,
+        media_type="application/pdf",
+        filename=f"{incident_id}.pdf"
+    )

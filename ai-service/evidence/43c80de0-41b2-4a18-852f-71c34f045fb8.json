@@ -1,0 +1,52 @@
+{
+    "incidentId": "43c80de0-41b2-4a18-852f-71c34f045fb8",
+    "time": "22:24",
+    "transcription": "AHHHHHHHHHHHHHH",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "CRITICAL",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 1.4037,
+        "matchedLabels": [
+            {
+                "label": "Groan",
+                "confidence": 0.6601
+            },
+            {
+                "label": "Screaming",
+                "confidence": 0.3765
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.2298
+            },
+            {
+                "label": "Grunt",
+                "confidence": 0.1192
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0181
+            }
+        ],
+        "topPrediction": "Groan",
+        "topConfidence": 0.6601
+    },
+    "analysis": {
+        "risk": "CRITICAL",
+        "summary": "Scream detection from the transcription, indicating possible distress or emergency.",
+        "keywords": [],
+        "recommendedAction": "Call local emergency services immediately and provide location details."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 99,
+        "reason": "The transcription and scream detection indicate distress (isScream: True, distressScore: 1.4037), suggesting a genuine emergency."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true,
+        "confidence": 95,
+        "reason": "High risk and scream detection with a distress score of 1.4037, matched labels including 'Groan', 'Screaming', 'Wail, moan', 'Grunt' and 'Shout'."
+    }
+}
