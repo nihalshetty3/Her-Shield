@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 import os
+import uuid
 import shutil
 from pydantic import BaseModel
 from services.guardian_service import guardian_chat
@@ -13,6 +14,11 @@ from services.decision_service import should_trigger_sos
 from services.ai_decision_service import ai_should_trigger_sos
 from services.fake_sos_service import detect_fake_sos
 from services.context_service import build_context
+from services.evidence_service import save_incident
+from fastapi.responses import FileResponse
+from services.evidence_service import load_incident
+from services.report_service import generate_report
+from services.pdf_service import create_pdf
 
 latest_incident = None
 
@@ -67,6 +73,20 @@ async def detect_voice(file: UploadFile = File(...)):
 
         analysis = analyze_incident(incident)
 
+        incident_record = {
+            "incidentId": str(uuid.uuid4()),
+            "time": incident["time"],
+            "transcription": transcription,
+            "keywords": keyword_result["matched"],
+            "keywordScore": keyword_result["score"],
+            "risk": risk,
+            "screamDetection": scream_result,
+            "analysis": analysis,
+            "aiDecision": ai_decision,
+            "fakeSOSDetection": fake_result
+        }
+        save_incident(incident_record)
+        
         if not fake_result["isEmergency"]:
             trigger_sos = False
         else:
@@ -107,7 +127,8 @@ async def detect_voice(file: UploadFile = File(...)):
     response["triggerSOS"] = trigger_sos
     response["aiDecision"] = ai_decision
     response["fakeSOSDetection"] = fake_result
-
+    response["incidentId"]= incident_record["incidentId"]
+    
     # ================= DEBUG LOGS =================
 
     print("\n========== TRANSCRIPTION ==========")
@@ -174,3 +195,26 @@ async def guardian_chat_endpoint(request: GuardianRequest):
     return {
          "answer": answer
     }
+    
+@app.get("/report/{incident_id}")
+def generate_police_report(incident_id):
+    incident = load_incident(
+        incident_id
+    )
+    
+    if incident is None:
+        return {
+            "error":"Incident not found"
+        }
+    report = generate_report(
+        incident
+    )
+    pdf = create_pdf(
+        incident_id,
+        report
+    )
+    return FileResponse(
+        pdf,
+        media_type="application/pdf",
+        filename=f"{incident_id}.pdf"
+    )
