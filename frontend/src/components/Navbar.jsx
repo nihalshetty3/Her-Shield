@@ -1,10 +1,13 @@
 import React from 'react';
 import { Shield, Bell, Settings } from 'lucide-react';
 
-const Navbar = ({ onBellClick, onSettingsClick }) => {
+const Navbar = ({ onBellClick, onSettingsClick, onBrandClick }) => {
   return (
     <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/5 px-6 md:px-12 py-5 flex items-center justify-between">
-      <div className="flex items-center gap-3">
+      <div 
+        onClick={onBrandClick}
+        className="flex items-center gap-3 cursor-pointer hover:opacity-95 transition-opacity"
+      >
         <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-neon-orchid/20 to-pink-500/20 border border-white/10">
           <Shield className="w-5 h-5 text-neon-orchid" />
           <div className="absolute -inset-0.5 rounded-2xl bg-neon-orchid/30 blur opacity-30 animate-pulse" />

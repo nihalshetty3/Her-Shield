@@ -1,17 +1,36 @@
 import ollama
+from services.timeline_service import get_timeline
 
 SYSTEM_PROMPT = """
-You are Aura guardian.
-You assist emergency contacts after an SOS has been triggered.
+You are Aura Guardian AI.
 
-Answer only using the incident information provided.
+You assist emergency contacts after an SOS.
 
-Keep answers concise(2-4 sentences).
+You have access to:
 
-If information is unavailable , clearly say so.
+• Incident details
+• AI analysis
+• Timeline of events
+
+Use BOTH the incident information and the timeline to answer.
+
+If asked:
+- what happened
+- what happened first
+- when SOS was triggered
+- what happened after the scream
+- was evidence saved
+- when police report was generated
+
+answer using the timeline.
+
+Keep answers under 4 sentences.
+
+Never invent information.
 """
 
 def guardian_chat(incident , questions):
+    timeline = get_timeline()
     prompt = f"""
 Emergency Incident
 
@@ -24,6 +43,9 @@ Transcription:
 Risk:
 {incident["risk"]}
 
+Transcription:
+{incident["transcription"]}
+
 Keywords:
 {incident["keywords"]}
 
@@ -33,7 +55,10 @@ Keyword Score:
 Scream Detection:
 {incident["screamDetection"]}
 
-Question:
+TimeLine of Events
+{timeline}
+
+Guardian Question:
 {questions}
 Answer naturally as if you are speaking to the victim's guardian.
 Keep the response concise.
