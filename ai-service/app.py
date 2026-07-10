@@ -3,6 +3,7 @@ import os
 import uuid
 import shutil
 from pydantic import BaseModel
+
 from services.guardian_service import guardian_chat
 from services.whisper_service import transcribe
 from services.keyword_service import detect_keywords
@@ -19,12 +20,17 @@ from fastapi.responses import FileResponse
 from services.evidence_service import load_incident
 from services.report_service import generate_report
 from services.pdf_service import create_pdf
-
+from services.shake_service import detect_shake
+from services.timeline_service import (
+    add_event, get_timeline, clear_timeline
+)
 latest_incident = None
 
 app = FastAPI()
 
 os.makedirs("audio", exist_ok=True)
+clear_timeline()
+add_event("Emergency Monitoring Staeted")
 
 @app.post("/voice/detect")
 async def detect_voice(file: UploadFile = File(...)):
@@ -35,16 +41,35 @@ async def detect_voice(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
 
     transcription = transcribe(path)
-
+    add_event(
+        "Voice Transcribed",
+        transcription
+    )
+    
     keyword_result = detect_keywords(transcription)
-
+    add_event(
+        "Keywords Detected",
+        keyword_result
+    )
+    
     scream_result = detect_scream(path)
+    add_event(
+        "Scream Detection Completed",
+        scream_result
+    )
     
     score = keyword_result["score"]
     if scream_result["isScream"]:
         score+=10
     
     risk = calculate_risk(score)
+    add_event(
+        "Risk Calculated",
+        {
+            "risk": risk,
+            "score": score
+        }
+    )
     
     incident = build_context(
         transcription,
@@ -54,6 +79,10 @@ async def detect_voice(file: UploadFile = File(...)):
     )
 
     fake_result = detect_fake_sos(incident)
+    add_event(
+        "Fake SOS Analysis",
+        fake_result
+    )
     
     # Increase risk further if AI thinks it's a real emergency
     if fake_result["isEmergency"]:
@@ -70,9 +99,17 @@ async def detect_voice(file: UploadFile = File(...)):
     try:
         
         ai_decision = ai_should_trigger_sos(incident)
-
+        add_event(
+            "AI Decision",
+            ai_decision
+        )
+        
         analysis = analyze_incident(incident)
-
+        add_event(
+            "Incident Analysis Completed",
+            analysis
+        )
+        
         incident_record = {
             "incidentId": str(uuid.uuid4()),
             "time": incident["time"],
@@ -85,13 +122,26 @@ async def detect_voice(file: UploadFile = File(...)):
             "aiDecision": ai_decision,
             "fakeSOSDetection": fake_result
         }
-        save_incident(incident_record)
         
         if not fake_result["isEmergency"]:
             trigger_sos = False
         else:
             trigger_sos = ai_decision["triggerSOS"]
-
+            if trigger_sos:
+                add_event(
+                    "SOS Triggered"
+                )
+            else:
+                add_event(
+                    "SOS Not triggered"
+                )
+        
+        save_incident(incident_record)
+        add_event(
+            "Evidence Saved",
+            incident_record["incidentId"]
+        )
+                
     except Exception as e:
 
         print("\n========== AI DECISION ERROR ==========")
@@ -213,8 +263,32 @@ def generate_police_report(incident_id):
         incident_id,
         report
     )
+    
+    add_event(
+        "Police Report Generated",
+        incident_id
+    )
     return FileResponse(
         pdf,
         media_type="application/pdf",
         filename=f"{incident_id}.pdf"
     )
+
+class ShakeRequest(BaseModel):
+    shakeCount: int
+    peakAcceleration: float
+    duration: float
+    
+@app.post("/shake/detect")
+def shake_detect(request: ShakeRequest):
+    result = detect_shake(
+        request.shakeCount,
+        request.peakAcceleration,
+        request.duration
+    )
+    
+    return result
+
+@app.get("/timeline")
+def incident_timeline():
+    return get_timeline()

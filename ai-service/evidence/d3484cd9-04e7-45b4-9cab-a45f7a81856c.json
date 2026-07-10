@@ -1,0 +1,44 @@
+{
+    "incidentId": "d3484cd9-04e7-45b4-9cab-a45f7a81856c",
+    "time": "19:32",
+    "transcription": "Whoa!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "CRITICAL",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.1402,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0712
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0584
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0106
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2241
+    },
+    "analysis": {
+        "risk": "CRITICAL",
+        "summary": "A distress call was detected at 19:32 with a scream score of 0.1402 and associated labels of 'Screaming', 'Groan', and 'Shout'. The transcription indicates an exclamation 'Whoa!'.",
+        "keywords": [],
+        "recommendedAction": "Immediate emergency response is required due to the critical risk level. Dispatch appropriate emergency services."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 95,
+        "reason": "Voice transcription detected distress signals (whoa!), accompanied by scream detection indicating potential harm or emergency."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true,
+        "confidence": 95,
+        "reason": "Scream detection with a distressScore of 0.1402 and matched labels indicating screaming, groaning, or shouting"
+    }
+}
