@@ -21,7 +21,7 @@ const AudioTestPanel = () => {
     formData.append('audio', selectedFile);
 
     try {
-      const response = await fetch('http://localhost:5001/api/analyze-audio', {
+      const response = await fetch('http://localhost:3001/api/audio/analyze', {
         method: 'POST',
         body: formData
       });
