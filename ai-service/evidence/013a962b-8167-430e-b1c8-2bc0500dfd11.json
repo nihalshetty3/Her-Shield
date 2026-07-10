@@ -1,0 +1,44 @@
+{
+    "incidentId": "013a962b-8167-430e-b1c8-2bc0500dfd11",
+    "time": "20:56",
+    "transcription": "AHHHHHH!  AHHHHHHHHHH!  AHHHHHHHHHH!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "CRITICAL",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.519,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2751
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1332
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1107
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2751
+    },
+    "analysis": {
+        "risk": "CRITICAL",
+        "summary": "Emergency incident detected at 20:56, involving a person in distress as indicated by scream detection.",
+        "keywords": [],
+        "recommendedAction": "Immediately dispatch emergency services to the location provided."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 99,
+        "reason": "The transcription contains repeated screams with a high distress score, indicating a possible emergency situation."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true,
+        "confidence": 98,
+        "reason": "Transcription contains screams with a distress score of 0.519 and the keyword score is 0. The high risk rating further indicates a possible emergency situation."
+    }
+}
