@@ -6,26 +6,42 @@ const AuraCore = () => {
 
   const handleClick = () => {
     setSosStatus('triggering');
-    fetch("http://localhost:5001/api/trigger-sos", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ source: 'aura-core-click' })
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Server error');
-        return res.json();
+    const sendSos = (payload) => {
+      fetch("http://localhost:5001/api/trigger-sos", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       })
-      .then((data) => {
-        console.log('[Aura Core] Twilio SOS dispatched:', data);
-        setSosStatus('success');
-        setTimeout(() => {
-          setSosStatus('idle');
-        }, 4000);
-      })
-      .catch((err) => {
-        console.log('[Aura Core] Twilio SOS dispatch failed:', err);
-        setSosStatus('failed');
-      });
+        .then((res) => {
+          if (!res.ok) throw new Error('Server error');
+          return res.json();
+        })
+        .then((data) => {
+          console.log('[Aura Core] Twilio SOS dispatched:', data);
+          setSosStatus('success');
+          setTimeout(() => {
+            setSosStatus('idle');
+          }, 4000);
+        })
+        .catch((err) => {
+          console.log('[Aura Core] Twilio SOS dispatch failed:', err);
+          setSosStatus('failed');
+        });
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          sendSos({ source: 'aura-core-click', latitude, longitude });
+        },
+        () => {
+          sendSos({ source: 'aura-core-click' });
+        }
+      );
+    } else {
+      sendSos({ source: 'aura-core-click' });
+    }
   };
 
   useEffect(() => {

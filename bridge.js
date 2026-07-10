@@ -27,6 +27,9 @@ app.use(express.json());
 app.post('/api/trigger-sos', async (req, res) => {
   console.log(`[Bridge] Incoming SOS request received at ${new Date().toISOString()}`);
 
+  const { latitude, longitude } = req.body;
+  const mapsLink = latitude && longitude ? `http://maps.google.com/?q=${latitude},${longitude}` : 'Location Unavailable';
+
   const guardians = [
     process.env.GUARDIAN_PHONE_1 || process.env.GUARDIAN_PHONE,
     process.env.GUARDIAN_PHONE_2
@@ -34,7 +37,7 @@ app.post('/api/trigger-sos', async (req, res) => {
 
   console.log(`[Bridge] Concurrently dialing ${guardians.length} guardians...`);
 
-  const dialPromises = guardians.map((phone) => {
+  const dialPromises = guardians.map(async (phone) => {
     console.log(`[Bridge] Dispatched simultaneous dials for safety contact: ${phone}`);
 
     const call1Promise = client1.calls.create({
@@ -45,6 +48,21 @@ app.post('/api/trigger-sos', async (req, res) => {
       .then(call => console.log(`[Bridge] Dial Success via Client 1 to contact ${phone}. SID: ${call.sid}`))
       .catch(err => console.error(`[Bridge] Dial Failed via Client 1 to contact ${phone}. Error: ${err.message}`));
 
+    const sms1Promise = (async () => {
+      try {
+        if (client1 && process.env.TWILIO_PHONE_NUMBER_1) {
+          await client1.messages.create({
+            body: `🚨 EMERGENCY ALERT: A user has triggered an SOS! Live Tracking Link: ${mapsLink}`,
+            to: phone,
+            from: process.env.TWILIO_PHONE_NUMBER_1
+          });
+          console.log(`[Bridge] SMS Success via Client 1 to contact ${phone}`);
+        }
+      } catch (err) {
+        console.error(`[Bridge] SMS Failed via Client 1 to contact ${phone}. Error: ${err.message}`);
+      }
+    })();
+
     const call2Promise = client2.calls.create({
       to: phone,
       from: process.env.TWILIO_PHONE_NUMBER_2 || process.env.TWILIO_PHONE_NUMBER,
@@ -53,7 +71,22 @@ app.post('/api/trigger-sos', async (req, res) => {
       .then(call => console.log(`[Bridge] Dial Success via Client 2 to contact ${phone}. SID: ${call.sid}`))
       .catch(err => console.error(`[Bridge] Dial Failed via Client 2 to contact ${phone}. Error: ${err.message}`));
 
-    return Promise.all([call1Promise, call2Promise]);
+    const sms2Promise = (async () => {
+      try {
+        if (client2 && process.env.TWILIO_PHONE_NUMBER_2) {
+          await client2.messages.create({
+            body: `🚨 EMERGENCY ALERT: A user has triggered an SOS! Live Tracking Link: ${mapsLink}`,
+            to: phone,
+            from: process.env.TWILIO_PHONE_NUMBER_2
+          });
+          console.log(`[Bridge] SMS Success via Client 2 to contact ${phone}`);
+        }
+      } catch (err) {
+        console.error(`[Bridge] SMS Failed via Client 2 to contact ${phone}. Error: ${err.message}`);
+      }
+    })();
+
+    await Promise.all([call1Promise, sms1Promise, call2Promise, sms2Promise]);
   });
 
   await Promise.all(dialPromises);

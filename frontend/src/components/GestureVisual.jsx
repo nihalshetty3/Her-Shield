@@ -13,14 +13,30 @@ const GestureVisual = ({ isHovered, isActive }) => {
   }, []);
 
   const fireSosBackend = () => {
-    fetch('http://localhost:5001/api/trigger-sos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ source: 'gesture-shake' })
-    })
-      .then((res) => res.json())
-      .then((data) => console.log('[Gesture Network Sync] Broadcast Confirmed:', data))
-      .catch((err) => console.error('[Gesture Network Sync] Network pipeline broken:', err));
+    const sendSos = (payload) => {
+      fetch('http://localhost:5001/api/trigger-sos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then((res) => res.json())
+        .then((data) => console.log('[Gesture Network Sync] Broadcast Confirmed:', data))
+        .catch((err) => console.error('[Gesture Network Sync] Network pipeline broken:', err));
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          sendSos({ source: 'gesture-shake', latitude, longitude });
+        },
+        () => {
+          sendSos({ source: 'gesture-shake' });
+        }
+      );
+    } else {
+      sendSos({ source: 'gesture-shake' });
+    }
   };
 
   const handleTrigger = () => {
