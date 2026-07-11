@@ -1,0 +1,42 @@
+{
+    "incidentId": "84836dcd-012f-4be4-8c62-d24e1d28d562",
+    "time": "22:12",
+    "transcription": "Whoa!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.1402,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0712
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0584
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0106
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2241
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "Loud noise indicative of distress detected at 22:12.",
+        "recommendedAction": "Immediately notify emergency contacts and authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 95,
+        "reason": "Detected scream, calculated risk is high."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

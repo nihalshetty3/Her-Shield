@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 app=FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -40,13 +41,13 @@ from services.timeline_service import (
 from fastapi.responses import FileResponse
 latest_incident = None
 
-
 os.makedirs("audio", exist_ok=True)
-clear_timeline()
-add_event("Emergency Monitoring Staeted")
+
 @app.post("/voice/detect")
 async def detect_voice(file: UploadFile = File(...)):
-
+    clear_timeline()
+    add_event("Emergency Monitoring Staeted")
+    
     path = f"audio/{file.filename}"
 
     with open(path, "wb") as buffer:
@@ -203,6 +204,8 @@ async def detect_voice(file: UploadFile = File(...)):
     global latest_incident
 
     incident["analysis"] = analysis
+    incident["aiDecision"] = ai_decision
+    incident["fakeSOSDetection"] = fake_result
 
     latest_incident = incident
 
@@ -277,3 +280,27 @@ def shake_detect(request: ShakeRequest):
 @app.get("/timeline")
 def incident_timeline():
     return get_timeline()
+
+@app.get("/dashboard")
+def dashboard():
+    
+    global latest_incident
+    if latest_incident is None:
+        return {
+            "status":"No incident"
+        }
+    return {
+        "status": "ACTIVE",
+        "risk":latest_incident["risk"],
+        
+        "incidentType":
+            latest_incident["analysis"]["incidentType"],
+        "summary":
+            latest_incident["analysis"]["summary"],
+        "recommendedAction":
+            latest_incident["analysis"]["recommendedAction"],
+        "triggerSOS":
+            latest_incident["aiDecision"]["triggerSOS"],
+        "timeline":
+            get_timeline()    
+    }

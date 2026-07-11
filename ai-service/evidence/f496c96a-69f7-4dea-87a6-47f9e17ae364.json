@@ -1,0 +1,50 @@
+{
+    "incidentId": "f496c96a-69f7-4dea-87a6-47f9e17ae364",
+    "time": "22:29",
+    "transcription": "Aaaaaaah!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 1.4037,
+        "matchedLabels": [
+            {
+                "label": "Groan",
+                "confidence": 0.6601
+            },
+            {
+                "label": "Screaming",
+                "confidence": 0.3765
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.2298
+            },
+            {
+                "label": "Grunt",
+                "confidence": 0.1192
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0181
+            }
+        ],
+        "topPrediction": "Groan",
+        "topConfidence": 0.6601
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Physical Harm",
+        "risk": "HIGH",
+        "summary": "The user appears to be in distress as indicated by a scream and no clear indication of a joke, movie, testing, or accidental trigger.",
+        "recommendedAction": "Immediately notify emergency contacts and local authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "Detected Scream Detection with high distressScore and no clear indication of non-emergency."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}
