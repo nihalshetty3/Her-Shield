@@ -1,5 +1,15 @@
 from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+app=FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+allow_credentials = True,
+allow_methods = ["*"],
+allow_headers = ["*"],
+)   
+
 import os
 import uuid
 import shutil
@@ -30,7 +40,6 @@ from services.timeline_service import (
 from fastapi.responses import FileResponse
 latest_incident = None
 
-app = FastAPI()
 
 os.makedirs("audio", exist_ok=True)
 clear_timeline()
