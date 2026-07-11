@@ -1,7 +1,7 @@
 from faster_whisper import WhisperModel
 
 model=WhisperModel(
-    "small",
+    "tiny",
     device="cpu",
     compute_type="int8"
 )
