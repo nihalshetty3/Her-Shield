@@ -21,6 +21,8 @@ from services.report_service import generate_report
 from services.decision_service import should_trigger_sos
 from services.pdf_service import create_pdf
 from services.shake_service import detect_shake
+from utils.audio_convertor import convert_to_wav
+
 from services.timeline_service import (
     add_event,
     get_timeline,
@@ -39,6 +41,8 @@ add_event("Emergency Monitoring Staeted")
 async def detect_voice(file: UploadFile = File(...)):
 
     path = f"audio/{file.filename}"
+    if path.endswith(".webm"):
+        path = convert_to_wav(path)
 
     with open(path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)

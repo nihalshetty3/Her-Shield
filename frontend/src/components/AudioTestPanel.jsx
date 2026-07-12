@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const AudioTestPanel = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [summary, setSummary] = useState("");
   const [isSosTriggered, setIsSosTriggered] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const audioChunksRef = useRef([]);
+  const mediaRecorderRef = useRef(null);
+
+  const streamRef = useRef(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -13,7 +18,143 @@ const AudioTestPanel = () => {
       setIsSosTriggered(false);
     }
   };
+  const startLiveProtection = async () => {
+    if (isListening) return;
 
+    if (!navigator.mediaDevices) {
+      alert("Microphone not supported.");
+      return;
+    }
+    try {
+
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+      streamRef.current = stream;
+
+      const recorder = new MediaRecorder(stream);
+
+      mediaRecorderRef.current = recorder;
+
+      audioChunksRef.current = [];
+
+      recorder.ondataavailable = (event) => {
+
+        if (event.data.size > 0) {
+
+          audioChunksRef.current.push(event.data);
+
+        }
+
+      };
+
+      recorder.onstart = () => {
+
+        console.log("Recording Started");
+
+      };
+
+      recorder.start();
+
+      setIsListening(true);
+
+    }
+
+    catch (err) {
+
+      console.error(err);
+
+      alert("Microphone permission denied.");
+
+    }
+
+  };
+
+  const stopLiveProtection = () => {
+
+    const recorder = mediaRecorderRef.current;
+
+    recorder.onstop = async () => {
+
+      const audioBlob = new Blob(
+        audioChunksRef.current,
+        {
+          type: "audio/webm"
+        }
+      );
+
+      const formData = new FormData();
+
+      formData.append(
+        "audio",
+        audioBlob,
+        "live.webm"
+      );
+
+      setLoading(true);
+
+      try {
+
+        const response = await fetch(
+          "http://localhost:3001/api/audio/analyze",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (data.analysis?.summary) {
+
+          setSummary(data.analysis.summary);
+
+        }
+
+        else {
+
+          setSummary(data.transcription);
+
+        }
+
+        setIsSosTriggered(data.triggerSOS);
+
+      }
+
+      catch (err) {
+
+        console.error(err);
+
+        setSummary("Failed to analyze.");
+
+      }
+
+      finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+    if (
+      recorder &&
+      recorder.state !== "inactive"
+    ) {
+      recorder.stop();
+    }
+
+    streamRef.current
+      ?.getTracks()
+      .forEach(track => track.stop());
+
+    setIsListening(false);
+
+  };
   const handleAudioSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,13 +202,35 @@ const AudioTestPanel = () => {
       setIsSosTriggered(false);
     } finally {
       setLoading(false);
+      audioChunksRef.current = [];
+
     }
   };
-
   const handleResetTerminal = () => {
+
+    if (mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive") {
+
+      mediaRecorderRef.current.stop();
+
+    }
+
+    if (streamRef.current) {
+
+      streamRef.current
+        .getTracks()
+        .forEach(track => track.stop());
+
+    }
+
     setIsSosTriggered(false);
     setSummary("");
     setSelectedFile(null);
+    setLoading(false);
+    setIsListening(false);
+
+    audioChunksRef.current = [];
+
   };
 
   return (
@@ -82,6 +245,52 @@ const AudioTestPanel = () => {
           Emergency Audio Diagnostics
         </h2>
       </div>
+      <div className="p-4 rounded-2xl bg-white/3 border border-white/5 flex flex-col gap-3">
+
+        <label className="text-[11px] font-mono uppercase tracking-wider text-pink-100/40">
+
+          Live Emergency Detection
+
+        </label>
+
+        {
+
+          !isListening ?
+
+            <button
+
+              type="button"
+
+              onClick={startLiveProtection}
+
+              className="w-full py-3 rounded-2xl  bg-neon-orchid text-white font-bold"
+
+            >
+
+              🎤 Start Live Protection
+
+            </button>
+
+            :
+
+            <button
+              type="button"
+              onClick={stopLiveProtection}
+              disabled={loading}
+              className="w-full py-3 rounded-2xl bg-red-600 text-white font-bold disabled:opacity-50"
+            >
+              {loading ? "Analyzing..." : "🛑 Analyze Recording"}
+            </button>
+
+
+        }
+
+      </div>
+      {isListening && (
+        <div className="text-green-400 font-semibold animate-pulse">
+          🎙 Listening...
+        </div>
+      )}
 
       <form
         onSubmit={handleAudioSubmit}
@@ -96,6 +305,7 @@ const AudioTestPanel = () => {
           <input
             type="file"
             accept=".mp3,.wav"
+            disabled={isListening}
             onChange={handleFileChange}
             className="block w-full text-xs text-pink-100/50
             file:mr-4 file:py-2 file:px-4
@@ -114,7 +324,7 @@ const AudioTestPanel = () => {
 
         <button
           type="submit"
-          disabled={!selectedFile || loading}
+          disabled={!selectedFile || loading || isListening}
           className="w-full py-3 rounded-2xl
           font-serif font-bold tracking-wider uppercase
           transition-all duration-300
