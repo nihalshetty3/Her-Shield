@@ -1,0 +1,42 @@
+{
+    "incidentId": "2562ec34-61e0-431a-b0f1-0f948133d4f1",
+    "time": "20:40",
+    "transcription": "AHHHHH!  AHHHHHHHHH!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.519,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2751
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1332
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1107
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2751
+    },
+    "analysis": {
+        "incidentType": "Possible Physical Attack",
+        "risk": "HIGH",
+        "summary": "An individual is heard screaming in distress at 20:40.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The transcription contains no spoken words, but the detected scream suggests a possible emergency situation."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}
