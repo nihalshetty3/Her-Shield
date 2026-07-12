@@ -1,11 +1,16 @@
 const sendAudioToAI = require("../services/ai.service");
 const { startWorkflow } = require("../services/emergencyWorkflow.service");
-
+const fs = require("fs");
 
 const analyzeAudio = async (req, res) => {
     try {
         console.log(req.file);
         console.log(req.body);
+        console.log(req.file);
+
+        const header = fs.readFileSync(req.file.path).slice(0, 16);
+
+        console.log("Header:", header);
         if (!req.file) {
             return res.status(400).json({
                 success: false,

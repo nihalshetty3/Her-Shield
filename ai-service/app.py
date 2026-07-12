@@ -32,7 +32,8 @@ from services.report_service import generate_report
 from services.decision_service import should_trigger_sos
 from services.pdf_service import create_pdf
 from services.shake_service import detect_shake
-from utils.audio_convertor import convert_to_wav
+
+from utils.audio_convertor import prepare_audio
 
 from services.timeline_service import (
     add_event,
@@ -48,17 +49,29 @@ os.makedirs("audio", exist_ok=True)
 @app.post("/voice/detect")
 async def detect_voice(file: UploadFile = File(...)):
     clear_timeline()
-    add_event("Emergency Monitoring Staeted")
-    
-    path = f"audio/{file.filename}"
-    if path.endswith(".webm"):
-        path = convert_to_wav(path)
-
-    with open(path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    add_event("Emergency Monitoring Started")
 
     # ------------------------------
-    # Parallel Processing
+    # Save Uploaded Audio
+    # ------------------------------
+    original_path = f"audio/{file.filename}"
+
+    with open(original_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    # Convert to WAV if required
+    path = prepare_audio(original_path)
+
+    print("\n========== AUDIO RECEIVED ==========")
+    print("Filename      :", file.filename)
+    print("Content Type  :", file.content_type)
+    print("Original Path :", original_path)
+    print("Processing    :", path)
+    print("Size          :", os.path.getsize(path), "bytes")
+    print("====================================\n")
+
+    # ------------------------------
+    # AI Processing
     # ------------------------------
     start = time.time()
 
@@ -70,7 +83,7 @@ async def detect_voice(file: UploadFile = File(...)):
         transcription = whisper_future.result()
         scream_result = scream_future.result()
 
-    print(f"Whisper + YAMNet completed in {time.time() - start:.2f} sec")
+    print(f"Whisper + YAMNet completed in {time.time() - start:.2f} sec\n")
 
     add_event("Voice Transcribed", transcription)
     add_event("Scream Detection Completed", scream_result)
@@ -98,7 +111,7 @@ async def detect_voice(file: UploadFile = File(...)):
     )
 
     # ------------------------------
-    # Build Context
+    # Build Incident Context
     # ------------------------------
     incident = build_context(
         transcription,
@@ -108,10 +121,6 @@ async def detect_voice(file: UploadFile = File(...)):
     )
 
     try:
-
-        # ----------------------------------
-        # ONE Ollama Call
-        # ----------------------------------
 
         ai_result = analyze_complete_incident(incident)
 
@@ -132,8 +141,6 @@ async def detect_voice(file: UploadFile = File(...)):
             "recommendedAction": ai_result["recommendedAction"]
         }
 
-        add_event("Unified AI Completed", ai_result)
-
         trigger_sos = ai_decision["triggerSOS"]
 
         incident_record = {
@@ -151,10 +158,8 @@ async def detect_voice(file: UploadFile = File(...)):
 
         save_incident(incident_record)
 
-        add_event(
-            "Evidence Saved",
-            incident_record["incidentId"]
-        )
+        add_event("Unified AI Completed", ai_result)
+        add_event("Evidence Saved", incident_record["incidentId"])
 
     except Exception as e:
 
@@ -188,9 +193,14 @@ async def detect_voice(file: UploadFile = File(...)):
         }
 
     # ------------------------------
-    # Response
+    # Cleanup Converted File
     # ------------------------------
+    if path != original_path and os.path.exists(path):
+        os.remove(path)
 
+    # ------------------------------
+    # Build Response
+    # ------------------------------
     response = build_response(
         transcription,
         keyword_result["matched"],

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.2",
+    "extendable-media-recorder": "^9.2.38",
+    "extendable-media-recorder-wav-encoder": "^7.0.139",
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

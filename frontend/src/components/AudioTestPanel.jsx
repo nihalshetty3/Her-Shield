@@ -1,4 +1,25 @@
 import React, { useState, useRef } from "react";
+import {
+  MediaRecorder,
+  register
+} from "extendable-media-recorder";
+
+import {
+  connect
+} from "extendable-media-recorder-wav-encoder";
+let encoderRegistered = false;
+
+const registerEncoder = async () => {
+
+  if (!encoderRegistered) {
+
+    await register(await connect());
+
+    encoderRegistered = true;
+
+  }
+
+};
 
 const AudioTestPanel = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -6,10 +27,9 @@ const AudioTestPanel = () => {
   const [isSosTriggered, setIsSosTriggered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const audioChunksRef = useRef([]);
   const mediaRecorderRef = useRef(null);
-
   const streamRef = useRef(null);
+
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -18,47 +38,130 @@ const AudioTestPanel = () => {
       setIsSosTriggered(false);
     }
   };
-  const startLiveProtection = async () => {
-    if (isListening) return;
 
-    if (!navigator.mediaDevices) {
-      alert("Microphone not supported.");
-      return;
-    }
+  const startLiveProtection = async () => {
+
     try {
 
+      await registerEncoder();
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true
       });
 
       streamRef.current = stream;
+      console.log(
+        MediaRecorder.isTypeSupported("audio/wav")
+      );
 
       const recorder = new MediaRecorder(stream);
-
+      
+      console.log("Recorder mime =", recorder.mimeType);
       mediaRecorderRef.current = recorder;
 
-      audioChunksRef.current = [];
+      const chunks = [];
 
       recorder.ondataavailable = (event) => {
 
         if (event.data.size > 0) {
 
-          audioChunksRef.current.push(event.data);
+          chunks.push(event.data);
 
         }
 
       };
 
-      recorder.onstart = () => {
+      recorder.onstop = async () => {
 
-        console.log("Recording Started");
+        const audioBlob = new Blob(chunks, {
+          type: "audio/wav"
+        });
+
+        const arr = await audioBlob.arrayBuffer();
+
+        const header = new Uint8Array(arr.slice(0, 16));
+
+        console.log(header);
+
+        console.log(audioBlob);
+        console.log(audioBlob.type);
+        console.log(audioBlob.size);
+
+        const formData = new FormData();
+
+        formData.append(
+          "audio",
+          audioBlob,
+          "live.wav"
+        );
+
+        setLoading(true);
+
+        try {
+
+          const response = await fetch(
+            "http://localhost:3001/api/audio/analyze",
+            {
+              method: "POST",
+              body: formData
+            }
+          );
+
+          const data = await response.json();
+
+          console.log("AI Response :", data);
+
+          if (data.analysis?.summary) {
+
+            setSummary(data.analysis.summary);
+
+          }
+          else if (data.transcription) {
+
+            setSummary(data.transcription);
+
+          }
+          else {
+
+            setSummary("Audio analyzed successfully.");
+
+          }
+
+          setIsSosTriggered(data.triggerSOS);
+
+        }
+
+        catch (err) {
+
+          console.error(err);
+
+          setSummary("Failed to analyze.");
+
+        }
+
+        finally {
+
+          setLoading(false);
+
+          setIsListening(false);
+
+          streamRef.current
+            ?.getTracks()
+            .forEach(track => track.stop());
+
+          streamRef.current = null;
+
+          mediaRecorderRef.current = null;
+
+        }
 
       };
 
       recorder.start();
 
       setIsListening(true);
+
+      console.log("🎤 Recording Started");
 
     }
 
@@ -72,80 +175,18 @@ const AudioTestPanel = () => {
 
   };
 
+
+
   const stopLiveProtection = () => {
 
     const recorder = mediaRecorderRef.current;
 
-    recorder.onstop = async () => {
+    if (!recorder) return;
 
-      const audioBlob = new Blob(
-        audioChunksRef.current,
-        {
-          type: "audio/webm"
-        }
-      );
+    if (recorder.state !== "inactive") {
 
-      const formData = new FormData();
-
-      formData.append(
-        "audio",
-        audioBlob,
-        "live.webm"
-      );
-
-      setLoading(true);
-
-      try {
-
-        const response = await fetch(
-          "http://localhost:3001/api/audio/analyze",
-          {
-            method: "POST",
-            body: formData
-          }
-        );
-
-        const data = await response.json();
-
-        console.log(data);
-
-        if (data.analysis?.summary) {
-
-          setSummary(data.analysis.summary);
-
-        }
-
-        else {
-
-          setSummary(data.transcription);
-
-        }
-
-        setIsSosTriggered(data.triggerSOS);
-
-      }
-
-      catch (err) {
-
-        console.error(err);
-
-        setSummary("Failed to analyze.");
-
-      }
-
-      finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-    if (
-      recorder &&
-      recorder.state !== "inactive"
-    ) {
       recorder.stop();
+
     }
 
     streamRef.current
@@ -155,6 +196,8 @@ const AudioTestPanel = () => {
     setIsListening(false);
 
   };
+
+
   const handleAudioSubmit = async (e) => {
     e.preventDefault();
 
@@ -202,34 +245,25 @@ const AudioTestPanel = () => {
       setIsSosTriggered(false);
     } finally {
       setLoading(false);
-      audioChunksRef.current = [];
+
 
     }
   };
+
   const handleResetTerminal = () => {
 
-    if (mediaRecorderRef.current &&
-      mediaRecorderRef.current.state !== "inactive") {
+    streamRef.current
+      ?.getTracks()
+      .forEach(track => track.stop());
 
-      mediaRecorderRef.current.stop();
+    streamRef.current = null;
+    mediaRecorderRef.current = null;
 
-    }
-
-    if (streamRef.current) {
-
-      streamRef.current
-        .getTracks()
-        .forEach(track => track.stop());
-
-    }
-
-    setIsSosTriggered(false);
+    setIsListening(false);
+    setLoading(false);
     setSummary("");
     setSelectedFile(null);
-    setLoading(false);
-    setIsListening(false);
-
-    audioChunksRef.current = [];
+    setIsSosTriggered(false);
 
   };
 
