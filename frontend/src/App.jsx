@@ -18,6 +18,8 @@ import SosButton from './components/SosButton';
 import SosOverlay from './components/SosOverlay';
 import AudioTestPanel from './components/AudioTestPanel';
 import ProfilePage from './pages/ProfilePage';
+import GuardianChat from './components/GuardianChat';
+import IncidentDashboard from './components/IncidentDashboard';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -169,6 +171,14 @@ function App() {
 
             <section className="w-full mt-16 max-w-4xl">
               <AudioTestPanel />
+            </section>
+            
+            <section className="w-full mt-16 max-w-5xl">
+              <IncidentDashboard/>
+            </section>
+
+            <section className="w-full mt-16 max-w-5xl">
+              <GuardianChat />
             </section>
 
             <section className="w-full mt-24 max-w-4xl glass-panel p-8 rounded-[32px] border border-white/5 relative">

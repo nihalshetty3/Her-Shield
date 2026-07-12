@@ -1,0 +1,42 @@
+{
+    "incidentId": "089dcc20-0b84-4bfc-8ed1-58dc64a3fe4b",
+    "time": "22:21",
+    "transcription": "Whoooooooooooo!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.1402,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0712
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0584
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0106
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2241
+    },
+    "analysis": {
+        "incidentType": "Distress Call",
+        "risk": "HIGH",
+        "summary": "A distress call with screaming sounds was detected at 22:21.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The audio transcription includes screams, which are indicative of a possible emergency."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

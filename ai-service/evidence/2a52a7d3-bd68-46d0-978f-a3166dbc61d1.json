@@ -1,0 +1,42 @@
+{
+    "incidentId": "2a52a7d3-bd68-46d0-978f-a3166dbc61d1",
+    "time": "19:41",
+    "transcription": "OOOOOOOOOOOOOOO",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.1402,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0712
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0584
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0106
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2241
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Distress Call",
+        "risk": "HIGH",
+        "summary": "Distressed individual making distressing sounds.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The voice transcription contains no spoken words, but scream detection indicates distress. The calculated risk is high."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}
