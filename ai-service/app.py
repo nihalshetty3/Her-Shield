@@ -44,6 +44,11 @@ from services.timeline_service import (
 from fastapi.responses import FileResponse
 latest_incident = None
 
+latest_location = {
+    "latitude": None,
+    "longitude": None
+}
+
 os.makedirs("audio", exist_ok=True)
 
 @app.post("/voice/detect")
@@ -227,6 +232,10 @@ async def detect_voice(file: UploadFile = File(...)):
 class GuardianRequest(BaseModel):
     question:str
     
+class LocationRequest(BaseModel):
+    latitude:float
+    longitude:float
+    
 @app.post(("/guardian/chat"))
 async def guardian_chat_endpoint(request: GuardianRequest):
     
@@ -291,6 +300,21 @@ def shake_detect(request: ShakeRequest):
     
     return result
 
+@app.post("/location/update")
+def update_location(request: LocationRequest):
+    
+    global latest_location
+    latest_location = {
+        "latitude": request.latitude,
+        "longitude": request.longitude
+    }
+    print("\n========== LOCATION UPDATE ==========")
+    print(latest_location)
+    
+    return {
+        "success":True
+    }
+
 @app.get("/timeline")
 def incident_timeline():
     return get_timeline()
@@ -315,6 +339,7 @@ def dashboard():
             latest_incident["analysis"]["recommendedAction"],
         "triggerSOS":
             latest_incident["aiDecision"]["triggerSOS"],
+        "location": latest_location,
         "timeline":
             get_timeline()    
     }
