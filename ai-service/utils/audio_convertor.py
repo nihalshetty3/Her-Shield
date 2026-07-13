@@ -3,6 +3,7 @@
 from pathlib import Path
 import subprocess
 import uuid
+import shutil
 
 SUPPORTED_FORMATS = {
     ".wav",
@@ -12,7 +13,13 @@ SUPPORTED_FORMATS = {
     ".m4a",
     ".flac"
 }
-FFMPEG_PATH = r"C:\Users\anvit\Downloads\ffmpeg-2026-07-09-git-8de8405796-full_build\ffmpeg-2026-07-09-git-8de8405796-full_build\bin\ffmpeg.exe"
+# FFMPEG_PATH = r"C:\Users\anvit\Downloads\ffmpeg-2026-07-09-git-8de8405796-full_build\ffmpeg-2026-07-09-git-8de8405796-full_build\bin\ffmpeg.exe"
+FFMPEG_PATH = shutil.which("ffmpeg")
+
+if FFMPEG_PATH is None:
+    raise RuntimeError(
+        "FFmpeg is not or not available in Path"
+    )
 def prepare_audio(audio_path: str):
 
     path = Path(audio_path)

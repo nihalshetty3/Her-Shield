@@ -18,7 +18,6 @@ export default function GuardianMap() {
     async function load() {
 
         const res = await fetch("http://localhost:8000/dashboard");
-
         const data = await res.json();
 
         setLocation(data.location);
@@ -35,11 +34,11 @@ export default function GuardianMap() {
 
     }, []);
 
-    if (!location) {
+    // Safe fallback values
+    const lat = location?.latitude ?? 12.9143;
+    const lng = location?.longitude ?? 74.8560;
 
-        return <h2>📍 Waiting for location...</h2>;
-
-    }
+    const center = [lat, lng];
 
     return (
 
@@ -50,10 +49,7 @@ export default function GuardianMap() {
             </h2>
 
             <MapContainer
-                center={[
-                    location.latitude,
-                    location.longitude
-                ]}
+                center={center}
                 zoom={18}
                 style={{
                     height: "500px",
@@ -66,15 +62,12 @@ export default function GuardianMap() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                <Marker
-                    position={[
-                        location.latitude,
-                        location.longitude
-                    ]}
-                >
+                <Marker position={center}>
+
                     <Popup>
                         Victim Current Location
                     </Popup>
+
                 </Marker>
 
             </MapContainer>

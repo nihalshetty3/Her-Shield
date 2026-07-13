@@ -29,7 +29,7 @@ const AudioTestPanel = () => {
   const [isListening, setIsListening] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
-
+  const locationWatchRef = useRef(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -38,6 +38,55 @@ const AudioTestPanel = () => {
       setIsSosTriggered(false);
     }
   };
+
+  function startLocationTracking() {
+    if(!navigator.geolocation) {
+      console.log("GeoLocation not supported");
+      return;
+    }
+
+    locationWatchRef.current = navigator.geolocation.watchPosition (
+      async (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        console.log("📍", latitude, longitude);
+        try{
+          await fetch(
+            "http://localhost:8000/location/update",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                latitude,
+                longitude
+              })
+            }
+          );
+        }
+        catch(err){
+          console.log(err);
+        }
+      },
+      (err) => console.log(err),
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000
+      }
+    );
+  }
+
+  function stopLocationTracking(){
+    if(locationWatchRef.current !== null){
+      navigator.geolocation.clearWatch(
+        locationWatchRef.current
+      );
+      locationWatchRef.current = null;
+    }
+  }
 
   const startLiveProtection = async () => {
 
@@ -144,7 +193,8 @@ const AudioTestPanel = () => {
           setLoading(false);
 
           setIsListening(false);
-
+          
+          stopLocationTracking();
           streamRef.current
             ?.getTracks()
             .forEach(track => track.stop());
@@ -160,7 +210,7 @@ const AudioTestPanel = () => {
       recorder.start();
 
       setIsListening(true);
-
+      startLocationTracking();
       console.log("🎤 Recording Started");
 
     }
@@ -194,7 +244,7 @@ const AudioTestPanel = () => {
       .forEach(track => track.stop());
 
     setIsListening(false);
-
+    stopLocationTracking();
   };
 
 
@@ -264,7 +314,7 @@ const AudioTestPanel = () => {
     setSummary("");
     setSelectedFile(null);
     setIsSosTriggered(false);
-
+    stopLocationTracking();
   };
 
   return (

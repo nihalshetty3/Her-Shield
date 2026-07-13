@@ -45,8 +45,8 @@ from fastapi.responses import FileResponse
 latest_incident = None
 
 latest_location = {
-    "latitude": None,
-    "longitude": None
+     "latitude": 12.9143,
+    "longitude": 74.8560
 }
 
 os.makedirs("audio", exist_ok=True)
@@ -323,6 +323,11 @@ def incident_timeline():
 def dashboard():
     
     global latest_incident
+    global latest_location
+    
+    print("\n========== LOCATION ==========")
+    print(latest_location)
+        
     if latest_incident is None:
         return {
             "status":"No incident"
