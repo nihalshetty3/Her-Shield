@@ -1,0 +1,29 @@
+{
+    "incidentId": "c2067707-3a70-43eb-962b-cb6f47da24f4",
+    "time": "22:32",
+    "transcription": "",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.3915
+    },
+    "analysis": {
+        "incidentType": "Non-emergency",
+        "risk": "LOW",
+        "summary": "The transcription does not contain any emergency keywords or indications of distress.",
+        "recommendedAction": "Monitor the situation for changes that might indicate a real emergency."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 20,
+        "reason": "No emergency keywords detected and no scream was identified."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}

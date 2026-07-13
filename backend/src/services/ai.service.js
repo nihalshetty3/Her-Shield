@@ -6,11 +6,21 @@ const AI_SERVICE_URL = "http://127.0.0.1:8000/voice/detect";
 
 const sendAudioToAI = async (file) => {
     try {
+        console.log("Sending:", file.path);
+
+        const header = fs.readFileSync(file.path).slice(0, 16);
+
+        console.log("Header:", header);
         const formData = new FormData();
-        formData.append("file",
+        formData.append(
+            "file",
             fs.createReadStream(file.path),
-            file.originalname
+            {
+                filename: file.originalname,
+                contentType: file.mimetype
+            }
         );
+
 
         const response = await axios.post(
             AI_SERVICE_URL,
