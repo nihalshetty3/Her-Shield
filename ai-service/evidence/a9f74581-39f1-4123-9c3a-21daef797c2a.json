@@ -1,0 +1,42 @@
+{
+    "incidentId": "a9f74581-39f1-4123-9c3a-21daef797c2a",
+    "time": "21:15",
+    "transcription": "AHHHHHHHHH!  AHHHHHH!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.519,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2751
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1332
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1107
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2751
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Distress Call",
+        "risk": "HIGH",
+        "summary": "Loud screams detected at 21:15, possibly indicative of a distress situation.",
+        "recommendedAction": "Immediately notify emergency contacts and responders."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 95,
+        "reason": "Scream detection with high distress score."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

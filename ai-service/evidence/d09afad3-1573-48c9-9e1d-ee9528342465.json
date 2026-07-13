@@ -1,0 +1,32 @@
+{
+    "incidentId": "d09afad3-1573-48c9-9e1d-ee9528342465",
+    "time": "20:33",
+    "transcription": "Help. Help. Help. Help. Help. Help me.",
+    "keywords": [
+        "help",
+        "help me"
+    ],
+    "keywordScore": 20,
+    "risk": "CRITICAL",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Silence",
+        "topConfidence": 0.5744
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "CRITICAL",
+        "summary": "Repeated requests for help indicate a possible emergency situation.",
+        "recommendedAction": "Immediately notify emergency contacts and relevant authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The transcription contains multiple instances of the keyword 'help'."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}
