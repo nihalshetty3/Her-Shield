@@ -1,0 +1,31 @@
+{
+    "incidentId": "8b43734b-e3bd-439a-9cb8-6f83293e7860",
+    "time": "19:27",
+    "transcription": "Help. Help. Help. Help.",
+    "keywords": [
+        "help"
+    ],
+    "keywordScore": 10,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.4026
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "Individual is repeatedly asking for help.",
+        "recommendedAction": "Immediately notify emergency contacts and authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 90,
+        "reason": "Transcription contains 'help' keyword multiple times, risk level is high."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

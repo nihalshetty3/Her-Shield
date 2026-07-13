@@ -1,0 +1,29 @@
+{
+    "incidentId": "72505456-c3fb-410a-bdf9-65c4260b68ff",
+    "time": "19:19",
+    "transcription": "Hej, h\u00e4lp mig, h\u00e4lp mig, gammat!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Vehicle",
+        "topConfidence": 0.4217
+    },
+    "analysis": {
+        "incidentType": "",
+        "risk": "LOW",
+        "summary": "The incident does not appear to be an emergency based on the provided transcription.",
+        "recommendedAction": "No immediate action is required. However, it's recommended to keep monitoring for any further signs of distress or unusual behavior."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 20,
+        "reason": "The transcription does not contain common emergency words and scream detection indicates no distress. The calculated risk is low."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}
