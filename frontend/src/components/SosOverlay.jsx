@@ -6,13 +6,13 @@ const SosOverlay = ({ sosCountdown, onCancel }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-midnight/90 backdrop-blur-2xl transition-all duration-500 animate-[fadeIn_0.3s_ease-out]">
       {/* Pulsing Alarm Glow Rings */}
       <div className="absolute inset-0 bg-gradient-to-tr from-neon-orchid/15 via-red-900/10 to-transparent animate-pulse pointer-events-none" />
-      
+
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] rounded-full bg-neon-orchid/10 blur-[140px] pointer-events-none" />
-      
+
       {/* Main SOS Dialog Card */}
       <div className="glass-panel p-8 md:p-12 rounded-[40px] border border-white/10 max-w-xl w-full mx-4 shadow-[0_25px_60px_rgba(217,70,239,0.15)] relative overflow-hidden text-center flex flex-col items-center">
-        
-        <button 
+
+        <button
           onClick={onCancel}
           className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 text-white/70 hover:text-white transition-all duration-300 hover:scale-105 cursor-pointer"
         >
@@ -49,7 +49,7 @@ const SosOverlay = ({ sosCountdown, onCancel }) => {
               className="transition-all duration-1000 ease-linear"
             />
           </svg>
-          
+
           {/* Inner details */}
           <div className="flex flex-col items-center justify-center">
             <span className="text-5xl font-serif font-bold text-white tracking-tighter">
@@ -65,7 +65,7 @@ const SosOverlay = ({ sosCountdown, onCancel }) => {
           {sosCountdown > 0 ? 'Broadcasting Sanctuary Signal' : 'Signal Broadcast Complete'}
         </h2>
         <p className="text-sm font-sans font-light text-pink-100/60 leading-relaxed max-w-sm mb-8">
-          {sosCountdown > 0 
+          {sosCountdown > 0
             ? 'Your trusted circle and local security nodes will receive your telemetry details in real-time unless cancelled.'
             : 'All synced guardians are notified. Live recording and telemetry packet sent.'
           }
@@ -96,13 +96,13 @@ const SosOverlay = ({ sosCountdown, onCancel }) => {
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-4 w-full">
-          <button 
+          <button
             onClick={onCancel}
             className="flex-1 px-8 py-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-white/25 hover:bg-white/10 text-white font-medium transition-all duration-300 active:scale-98 cursor-pointer"
           >
             Cancel Alert
           </button>
-          <button 
+          <button
             className="flex-1 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-neon-orchid to-purple-600 text-white font-medium hover:brightness-110 shadow-lg shadow-neon-orchid/20 transition-all duration-300 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
           >
             Immediate Connect

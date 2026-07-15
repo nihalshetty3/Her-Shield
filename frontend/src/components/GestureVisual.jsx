@@ -88,37 +88,30 @@ const GestureVisual = ({ isHovered, isActive }) => {
   const visualActive = isActive || isSosTriggered;
 
   return (
-    <div 
-      className={`relative w-full min-h-[120px] p-4 flex flex-col items-center justify-center overflow-hidden bg-white/2 rounded-2xl border transition-all duration-500 ${
-        isSosTriggered 
-          ? 'border-red-500/40 brightness-110 drop-shadow-[0_0_30px_rgba(239,68,68,0.55)]' 
-          : 'border-white/5'
-      }`}
+    <div
+      className={`relative w-full min-h-[120px] p-4 flex flex-col items-center justify-center overflow-hidden bg-white/2 rounded-2xl border transition-all duration-500 ${isSosTriggered
+        ? 'border-red-500/40 brightness-110 drop-shadow-[0_0_30px_rgba(239,68,68,0.55)]'
+        : 'border-white/5'
+        }`}
     >
       <div className="absolute top-2 right-2 flex h-2 w-2">
-        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-          isSosTriggered ? 'bg-red-500' : 'bg-emerald-400'
-        }`}></span>
-        <span className={`relative inline-flex rounded-full h-2 w-2 ${
-          isSosTriggered ? 'bg-red-500' : 'bg-emerald-400'
-        }`}></span>
+        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isSosTriggered ? 'bg-red-500' : 'bg-emerald-400'
+          }`}></span>
+        <span className={`relative inline-flex rounded-full h-2 w-2 ${isSosTriggered ? 'bg-red-500' : 'bg-emerald-400'
+          }`}></span>
       </div>
 
-      <div className={`absolute w-12 h-12 rounded-full border border-pink-400/20 transition-all duration-1000 ${
-        isHovered || visualActive ? 'scale-[1.8] opacity-0' : 'scale-50 opacity-100'
-      }`} />
-      <div className={`absolute w-16 h-16 rounded-full border border-purple-400/10 transition-all duration-700 ${
-        isHovered || visualActive ? 'scale-[2.2] opacity-0' : 'scale-75 opacity-100'
-      }`} />
-      
-      <div className={`transition-transform duration-300 mt-2 mb-2 ${
-        isHovered || visualActive ? 'animate-[bounce_0.6s_infinite] rotate-12' : 'animate-[pulse_3s_infinite]'
-      }`}>
+      <div className={`absolute w-12 h-12 rounded-full border border-pink-400/20 transition-all duration-1000 ${isHovered || visualActive ? 'scale-[1.8] opacity-0' : 'scale-50 opacity-100'
+        }`} />
+      <div className={`absolute w-16 h-16 rounded-full border border-purple-400/10 transition-all duration-700 ${isHovered || visualActive ? 'scale-[2.2] opacity-0' : 'scale-75 opacity-100'
+        }`} />
+
+      <div className={`transition-transform duration-300 mt-2 mb-2 ${isHovered || visualActive ? 'animate-[bounce_0.6s_infinite] rotate-12' : 'animate-[pulse_3s_infinite]'
+        }`}>
         <div className="w-8 h-14 rounded-lg border-2 border-white/40 p-1 flex flex-col justify-between items-center bg-midnight/80 shadow-[inset_0_0_8px_rgba(255,255,255,0.15)]">
           <div className="w-3 h-0.5 bg-white/30 rounded-full" />
-          <div className={`w-2.5 h-2.5 rounded-full border border-neon-orchid/70 transition-all duration-300 ${
-            visualActive ? 'bg-neon-orchid shadow-[0_0_8px_rgba(217,70,239,0.8)]' : 'bg-white/10'
-          }`} />
+          <div className={`w-2.5 h-2.5 rounded-full border border-neon-orchid/70 transition-all duration-300 ${visualActive ? 'bg-neon-orchid shadow-[0_0_8px_rgba(217,70,239,0.8)]' : 'bg-white/10'
+            }`} />
           <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
         </div>
       </div>
@@ -130,13 +123,13 @@ const GestureVisual = ({ isHovered, isActive }) => {
       <div className="flex flex-col gap-2 w-full mt-2 z-20">
         <button
           onClick={handleToggleSensor}
-          className={`w-full py-1.5 px-3 rounded-lg text-[10px] tracking-widest uppercase font-mono transition-all duration-300 cursor-pointer text-center ${
-            isSensorEnabled 
-              ? 'border border-neon-orchid/50 text-neon-orchid bg-neon-orchid/10 shadow-[0_0_15px_rgba(217,70,239,0.3)] hover:bg-neon-orchid/20' 
-              : 'border border-white/10 text-white/70 hover:bg-white/5'
-          }`}
+          className={`w-full py-1.5 px-3 rounded-lg text-[10px] tracking-widest uppercase font-mono transition-all duration-300 cursor-pointer text-center relative overflow-hidden group ${isSensorEnabled
+            ? 'border border-neon-orchid/50 text-neon-orchid bg-neon-orchid/10 shadow-[0_0_15px_rgba(217,70,239,0.3)] hover:bg-neon-orchid/20'
+            : 'border border-white/10 text-white/70 hover:bg-white/5'
+            }`}
         >
-          {isSensorEnabled ? '🔒 Disable Sensor' : '🔓 Enable Sensor'}
+          <span className="relative z-10">{isSensorEnabled ? '🔒 Disable Sensor' : '🔓 Enable Sensor'}</span>
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[glint_0.8s_ease-in-out]" />
         </button>
         <span
           onClick={handleSimulateFlashTrigger}
@@ -157,9 +150,10 @@ const GestureVisual = ({ isHovered, isActive }) => {
             </h1>
             <button
               onClick={handleResetTerminal}
-              className="px-8 py-4 rounded-2xl bg-white text-red-600 font-serif font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-98 shadow-2xl cursor-pointer"
+              className="px-8 py-4 rounded-2xl bg-white text-red-600 font-serif font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-98 shadow-2xl cursor-pointer relative overflow-hidden group"
             >
-              Reset Terminal
+              <span className="relative z-10">Reset Terminal</span>
+              <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-red-500/10 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[glint_0.8s_ease-in-out]" />
             </button>
           </div>
         </div>

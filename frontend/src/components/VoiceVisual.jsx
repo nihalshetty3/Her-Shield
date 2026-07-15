@@ -8,17 +8,16 @@ const VoiceVisual = ({ isHovered, isActive }) => {
       {waveHeights.map((height, i) => (
         <div
           key={i}
-          className={`w-[3px] rounded-full transition-all duration-500 bg-gradient-to-t ${
-            isActive 
-              ? 'from-purple-500 via-pink-400 to-neon-orchid' 
-              : 'from-pink-100/10 to-pink-100/20'
-          }`}
+          className={`w-[3px] rounded-full transition-all duration-500 bg-gradient-to-t ${isActive
+            ? 'from-purple-500 via-pink-400 to-neon-orchid'
+            : 'from-pink-100/10 to-pink-100/20'
+            }`}
           style={{
-            height: isActive 
-              ? (isHovered ? `${height * 65 + 10}px` : `${height * 35 + 15}px`) 
+            height: isActive
+              ? (isHovered ? `${height * 65 + 10}px` : `${height * 35 + 15}px`)
               : '10px',
-            animation: isActive 
-              ? `wave-bar 1.2s ease-in-out infinite alternate ${i * 0.12}s` 
+            animation: isActive
+              ? `wave-bar 1.2s ease-in-out infinite alternate ${i * 0.12}s`
               : 'none'
           }}
         />
