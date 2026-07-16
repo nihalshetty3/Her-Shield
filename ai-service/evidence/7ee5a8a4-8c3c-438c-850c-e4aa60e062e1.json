@@ -1,0 +1,42 @@
+{
+    "incidentId": "7ee5a8a4-8c3c-438c-850c-e4aa60e062e1",
+    "time": "21:17",
+    "transcription": "AHHHHH!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.5171,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2762
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1313
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1096
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2762
+    },
+    "analysis": {
+        "incidentType": "Possible Physical Harm or Assault",
+        "risk": "HIGH",
+        "summary": "The transcription contains a scream and no clear signs of a joke, movie, testing, or accidental trigger. The risk is calculated as high.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "Scream detection with distressScore above threshold and no non-emergency keywords detected."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

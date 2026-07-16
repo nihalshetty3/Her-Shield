@@ -1,0 +1,50 @@
+{
+    "incidentId": "0e59a746-7996-409b-ab58-99c230e89ef1",
+    "time": "20:04",
+    "transcription": "DUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 1.4138,
+        "matchedLabels": [
+            {
+                "label": "Groan",
+                "confidence": 0.6602
+            },
+            {
+                "label": "Screaming",
+                "confidence": 0.3799
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.2319
+            },
+            {
+                "label": "Grunt",
+                "confidence": 0.1231
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.0187
+            }
+        ],
+        "topPrediction": "Groan",
+        "topConfidence": 0.6602
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Distress Call",
+        "risk": "HIGH",
+        "summary": "The call contains a scream and distress sounds suggestive of an emergency.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The transcription includes a detected scream and the calculated risk is high."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

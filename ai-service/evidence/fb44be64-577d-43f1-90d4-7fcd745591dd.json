@@ -1,0 +1,42 @@
+{
+    "incidentId": "fb44be64-577d-43f1-90d4-7fcd745591dd",
+    "time": "20:00",
+    "transcription": "Whooooooo!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.136,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0701
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0559
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.01
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2269
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "The user emitted a distressing sound at 20:00.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 90,
+        "reason": "Transcription contains no clear keywords but scream detection is positive."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

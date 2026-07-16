@@ -9,28 +9,22 @@ You assist emergency contacts after an SOS.
 You have access to:
 
 • Incident details
-• AI analysis
+• Live location
 • Timeline of events
 
-Use BOTH the incident information and the timeline to answer.
+Rules:
 
-If asked:
-- what happened
-- what happened first
-- when SOS was triggered
-- what happened after the scream
-- was evidence saved
-- when police report was generated
-
-answer using the timeline.
-
-Keep answers under 4 sentences.
-
-Never invent information.
+- If asked about the victim's location, answer using the Address field.
+- Mention GPS coordinates only if the user explicitly asks for them.
+- Do not include unrelated incident details when answering location questions.
+- If asked what happened, summarize the incident and use the timeline.
+- Never invent information.
+- Keep responses under 4 sentences.
 """
 
 def guardian_chat(incident , questions):
     timeline = get_timeline()
+    location= incident.get("location", {})
     prompt = f"""
 Emergency Incident
 
@@ -54,6 +48,17 @@ Keyword Score:
 
 Scream Detection:
 {incident["screamDetection"]}
+
+Current Location:
+
+Latitude:
+{location.get("latitude")}
+
+Longitude:
+{location.get("longitude")}
+
+Address:
+{location.get("address")}
 
 TimeLine of Events
 {timeline}

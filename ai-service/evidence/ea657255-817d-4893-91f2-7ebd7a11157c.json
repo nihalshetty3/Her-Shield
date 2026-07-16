@@ -1,0 +1,42 @@
+{
+    "incidentId": "ea657255-817d-4893-91f2-7ebd7a11157c",
+    "time": "19:51",
+    "transcription": "Woooo!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.136,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0701
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0559
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.01
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2269
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "There seems to be a distress call based on the detected scream and lack of clear indication of a joke or accident.",
+        "recommendedAction": "Immediately notify emergency contacts and responders."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 90,
+        "reason": "Detected scream with a distress score, no clear indication of a non-emergency situation."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

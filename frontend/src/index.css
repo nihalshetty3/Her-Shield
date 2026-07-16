@@ -15,6 +15,7 @@
   --animate-pulse-glow: pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-wave-bar: wave-bar 1.2s ease-in-out infinite;
   --animate-orb-morph: orb-morph 12s ease-in-out infinite;
+  --animate-glint: glint 0.8s ease-in-out;
 
   @keyframes float-slow {
 
@@ -96,6 +97,15 @@
       transform: rotate(240deg) scale(0.98);
     }
   }
+
+  @keyframes glint {
+    0% {
+      transform: translateX(-150%) skewX(-15deg);
+    }
+    100% {
+      transform: translateX(150%) skewX(-15deg);
+    }
+  }
 }
 
 /* Custom Glassmorphism Utility Classes */
@@ -136,9 +146,12 @@
 html,
 body,
 #root {
+  width: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  overflow: hidden;
+  /* Prevents the main window from generating a secondary scrollbar */
   background-color: #0B0D17;
   color: #FFF0F5;
 }
