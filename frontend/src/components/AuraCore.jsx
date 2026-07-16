@@ -7,15 +7,20 @@ const AuraCore = () => {
   const handleClick = () => {
     setSosStatus('triggering');
     const sendSos = (payload) => {
-      fetch("http://localhost:5001/api/trigger-sos", {
+      fetch("http://localhost:3001/api/sos/trigger",{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-        .then((res) => {
-          if (!res.ok) throw new Error('Server error');
-          return res.json();
-        })
+      .then(async (res) => {
+        const data = await res.json();
+      
+        if (!res.ok) {
+          throw new Error(data.message || "Server error");
+        }
+      
+        return data;
+      })
         .then((data) => {
           console.log('[Aura Core] Twilio SOS dispatched:', data);
           setSosStatus('success');
@@ -33,14 +38,14 @@ const AuraCore = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          sendSos({ source: 'aura-core-click', latitude, longitude });
+          sendSos({ triggerType: "manual", latitude, longitude });
         },
         () => {
-          sendSos({ source: 'aura-core-click' });
+          sendSos({ triggerType: "manual" });
         }
       );
     } else {
-      sendSos({ source: 'aura-core-click' });
+      sendSos({ triggerType: "manual" });
     }
   };
 

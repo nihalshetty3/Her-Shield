@@ -1,0 +1,42 @@
+{
+    "incidentId": "ec2e8383-c5f7-4e24-92f4-89f0b45c44c7",
+    "time": "20:40",
+    "transcription": "Woah!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.136,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0701
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0559
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.01
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2269
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "The user emitted a distress sound at 20:40.",
+        "recommendedAction": "Immediately notify emergency contacts and local authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 85,
+        "reason": "The user's utterance 'Woah!' along with the scream detection indicates potential distress."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

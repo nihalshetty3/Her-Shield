@@ -1,0 +1,42 @@
+{
+    "incidentId": "9c5802e3-04fe-47d8-a821-95cabb7f7295",
+    "time": "20:47",
+    "transcription": "AHHHHHHHHHHHHHHHHHH",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.5171,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2762
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1313
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1096
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2762
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Distress",
+        "risk": "HIGH",
+        "summary": "The individual is in distress, indicated by repeated screaming.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "Transcription contains screams with a high distress score."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

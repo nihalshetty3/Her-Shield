@@ -1,0 +1,42 @@
+{
+    "incidentId": "3b95cf2e-8dea-4804-b415-8c32b1b4af57",
+    "time": "19:52",
+    "transcription": "Rrr, Rrr,  Rrr, Rrr!!!!!!!!!!!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.5171,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2762
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1313
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1096
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2762
+    },
+    "analysis": {
+        "incidentType": "Possible Assault or Distress Call",
+        "risk": "HIGH",
+        "summary": "The caller is in distress, possibly undergoing an assault based on the audible screams.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 98,
+        "reason": "The transcription contains multiple instances of screams and the calculated risk is high."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

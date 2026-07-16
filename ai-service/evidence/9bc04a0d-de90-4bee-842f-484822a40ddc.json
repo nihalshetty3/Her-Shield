@@ -1,0 +1,29 @@
+{
+    "incidentId": "9bc04a0d-de90-4bee-842f-484822a40ddc",
+    "time": "21:20",
+    "transcription": "",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Silence",
+        "topConfidence": 0.1396
+    },
+    "analysis": {
+        "incidentType": "Possible Non-Emergency",
+        "risk": "LOW",
+        "summary": "Non-emergency incident with low risk.",
+        "recommendedAction": "No action required as the incident does not appear to be an emergency."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 20,
+        "reason": "Transcription did not contain any emergency words and scream detection did not indicate distress. Additionally, calculated risk is LOW."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}

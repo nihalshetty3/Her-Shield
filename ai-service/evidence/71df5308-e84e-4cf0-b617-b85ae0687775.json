@@ -1,0 +1,42 @@
+{
+    "incidentId": "71df5308-e84e-4cf0-b617-b85ae0687775",
+    "time": "19:56",
+    "transcription": "Whoooooooooo!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.136,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0701
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0559
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.01
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2269
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "Loud screaming noise detected at 19:56.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 95,
+        "reason": "Detected scream with distress score and high calculated risk."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

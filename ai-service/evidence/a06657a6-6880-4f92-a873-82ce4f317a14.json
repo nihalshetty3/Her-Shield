@@ -1,0 +1,42 @@
+{
+    "incidentId": "a06657a6-6880-4f92-a873-82ce4f317a14",
+    "time": "19:49",
+    "transcription": "Argh!  Argh!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.5171,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2762
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1313
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1096
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2762
+    },
+    "analysis": {
+        "incidentType": "Possible Physical Assault or Distress",
+        "risk": "HIGH",
+        "summary": "Individual in distress, possibly due to a physical assault or other dangerous situation.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 95,
+        "reason": "Transcription contains distress sounds and scream detection indicates potential danger."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

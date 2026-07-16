@@ -32,6 +32,7 @@ from services.report_service import generate_report
 from services.decision_service import should_trigger_sos
 from services.pdf_service import create_pdf
 from services.shake_service import detect_shake
+from services.geocoding_service import reverse_geocode
 
 from utils.audio_convertor import prepare_audio
 
@@ -48,6 +49,7 @@ latest_location = {
      "latitude": 12.9143,
     "longitude": 74.8560
 }
+location_history=[]
 
 os.makedirs("audio", exist_ok=True)
 
@@ -124,6 +126,8 @@ async def detect_voice(file: UploadFile = File(...)):
         risk,
         scream_result
     )
+    incident["location"]=latest_location
+    incident["route"]=location_history
 
     try:
 
@@ -226,6 +230,8 @@ async def detect_voice(file: UploadFile = File(...)):
     incident["aiDecision"] = ai_decision
     incident["fakeSOSDetection"] = fake_result
 
+    incident["location"]=latest_location
+    incident["route"]=location_history
     latest_incident = incident
 
     return response
@@ -304,16 +310,33 @@ def shake_detect(request: ShakeRequest):
 def update_location(request: LocationRequest):
     
     global latest_location
-    latest_location = {
+    global location_history
+    
+    address = reverse_geocode(
+        request.latitude,
+        request.longitude
+    )
+    
+    latest_location={
         "latitude": request.latitude,
-        "longitude": request.longitude
+        "longitude": request.longitude,
+        "address": address
     }
+    
+    location_history.append([
+        request.latitude,
+        request.longitude
+    ])
+    
+    if len(location_history) > 200:
+        location_history.pop(0)
+        
     print("\n========== LOCATION UPDATE ==========")
     print(latest_location)
-    
+    print(location_history)
     return {
-        "success":True
-    }
+         "success": True
+     }
 
 @app.get("/timeline")
 def incident_timeline():
@@ -330,7 +353,10 @@ def dashboard():
         
     if latest_incident is None:
         return {
-            "status":"No incident"
+            "status":"No incident",
+            "location": latest_location,
+            "route": location_history,
+            "timeline": []
         }
     return {
         "status": "ACTIVE",
@@ -345,6 +371,7 @@ def dashboard():
         "triggerSOS":
             latest_incident["aiDecision"]["triggerSOS"],
         "location": latest_location,
+        "route": location_history,
         "timeline":
             get_timeline()    
     }

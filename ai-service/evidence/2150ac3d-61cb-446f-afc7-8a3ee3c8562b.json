@@ -1,0 +1,29 @@
+{
+    "incidentId": "2150ac3d-61cb-446f-afc7-8a3ee3c8562b",
+    "time": "21:28",
+    "transcription": "\u0647\u0644- \u0445 Volt- \u0647\u0644  \u0647\u0644 \u064a- \u0647\u0644 \u064a-",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.7096
+    },
+    "analysis": {
+        "incidentType": "Undetermined",
+        "risk": "LOW",
+        "summary": "The transcription contains Arabic phrases that don't indicate an emergency.",
+        "recommendedAction": "Monitor the situation for any signs of distress or further information."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 20,
+        "reason": "The keyword score is low, risk level is low, and there's no indication of a scream. The transcription seems to be in Arabic which might not contain typical emergency keywords."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}

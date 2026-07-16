@@ -32,14 +32,27 @@ const AudioTestPanel = () => {
   };
 
   function startLocationTracking() {
+
+    console.log("📍 Location Tracking Started");
+  
     if (!navigator.geolocation) {
-      console.log("GeoLocation not supported");
+      console.log("❌ Geolocation not supported");
       return;
     }
+  
     locationWatchRef.current = navigator.geolocation.watchPosition(
+  
       (position) => {
+  
+        console.log("✅ GPS RECEIVED");
+        console.log(position.coords);
+  
         const { latitude, longitude } = position.coords;
-        fetch("http://localhost:8000/location", {
+  
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+  
+        fetch("http://localhost:8000/location/update", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -48,12 +61,25 @@ const AudioTestPanel = () => {
             latitude,
             longitude
           })
-        }).catch(err => console.error("Error updating location:", err));
+        })
+        .then(() => console.log("✅ Location sent to backend"))
+        .catch(err => console.error("❌ Error updating location:", err));
+  
       },
-      (err) => console.error("Error watching location:", err),
+  
+      (err) => {
+  
+        console.log("❌ GPS ERROR");
+        console.log(err);
+  
+      },
+  
       {
-        enableHighAccuracy: true
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 10000
       }
+  
     );
   }
 
@@ -112,14 +138,18 @@ const AudioTestPanel = () => {
   const uploadAndAnalyze = async (file) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("audio", file);
+    formData.append("file", file);
     try {
-      const res = await fetch("http://localhost:8000/predict", {
+      const res = await fetch("http://localhost:8000/voice/detect", {
         method: "POST",
         body: formData
       });
       const data = await res.json();
-      setSummary(data.summary || "No threat detected.");
+      setSummary(
+        data.analysis?.summary ||
+        data.transcription ||
+        "No threat detected."
+    );
       if (data.triggerSOS) {
         setIsSosTriggered(true);
       } else {
