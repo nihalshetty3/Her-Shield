@@ -19,7 +19,7 @@ import time
 from pydantic import BaseModel
 
 from services.unified_ai_service import analyze_complete_incident
-
+from services.police_notification_service import notify_police
 from services.guardian_service import guardian_chat
 from services.whisper_service import transcribe
 from services.keyword_service import detect_keywords
@@ -162,10 +162,21 @@ async def detect_voice(file: UploadFile = File(...)):
             "screamDetection": scream_result,
             "analysis": analysis,
             "aiDecision": ai_decision,
-            "fakeSOSDetection": fake_result
+            "fakeSOSDetection": fake_result,
+            "location": latest_location,
+            "route": location_history
         }
 
+       
+
         save_incident(incident_record)
+
+        if trigger_sos:
+          print("\nEmergency detected. Notifying police...")
+          try:
+               notify_police(incident_record)
+          except Exception as e:
+               print(f"Police Notification Failed: {e}")
 
         add_event("Unified AI Completed", ai_result)
         add_event("Evidence Saved", incident_record["incidentId"])
@@ -235,6 +246,7 @@ async def detect_voice(file: UploadFile = File(...)):
     latest_incident = incident
 
     return response
+
 class GuardianRequest(BaseModel):
     question:str
     
