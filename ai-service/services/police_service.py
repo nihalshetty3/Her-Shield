@@ -10,14 +10,14 @@ POLICE_STATIONS=[
 
     {
         "name": "Karkala Police Station",
-        "email": "karkala@gmail.com",
+        "email": "nnm23is069@nmamit.in",
         "latitude": 13.2148,
         "longitude": 74.9923
     },
 
     {
         "name": "Mangalore Police Station",
-        "email": "mangalore@gmail.com",
+        "email": "nnm23is074@nmamit.in",
         "latitude": 12.9141,
         "longitude": 74.8560
     }
