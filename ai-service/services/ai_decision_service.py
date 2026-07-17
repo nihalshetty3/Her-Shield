@@ -47,7 +47,19 @@ Scream Detection:
 Incident Time:
 {incident["time"]}
 
-Determine whether this is a genuine emergency.
+Assume the user's safety is the highest priority.
+
+If there is ANY indication of physical danger,
+violence,
+continuous calls for help,
+panic,
+screaming,
+or uncertainty,
+
+triggerSOS MUST be true.
+
+Only return false when there is strong evidence that
+the situation is completely safe.
 
 Return ONLY valid JSON.
 """

@@ -1,7 +1,7 @@
 const client = require("../integrations/twilio.client");
 
 const makeEmergencyCall = async(incident) => {
-
+    console.log("Calling Twilio...");
     try{
         const call = await client.calls.create({
             to:process.env.GUARDIAN_PHONE,

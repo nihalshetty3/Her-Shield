@@ -1,0 +1,29 @@
+{
+    "incidentId": "b4aa7c5d-9d30-4499-84ea-f07da6463ac0",
+    "time": "21:06",
+    "transcription": "\u0627\u0644\u062d\u0644  \u0627\u0644\u062d\u0644",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.6175
+    },
+    "analysis": {
+        "incidentType": "Non-emergency Arabic Conversation",
+        "risk": "LOW",
+        "summary": "The user is having a conversation in Arabic.",
+        "recommendedAction": "Monitor the situation for any signs of distress or emergency."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 30,
+        "reason": "There are no keywords indicative of an emergency and the calculated risk is low."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}

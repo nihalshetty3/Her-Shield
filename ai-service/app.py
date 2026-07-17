@@ -15,6 +15,8 @@ import os
 import uuid
 import shutil
 import time
+import requests
+
 
 from pydantic import BaseModel
 
@@ -33,6 +35,7 @@ from services.decision_service import should_trigger_sos
 from services.pdf_service import create_pdf
 from services.shake_service import detect_shake
 from services.geocoding_service import reverse_geocode
+from services.safe_zone_service import find_safe_zones
 
 from utils.audio_convertor import prepare_audio
 
@@ -128,7 +131,19 @@ async def detect_voice(file: UploadFile = File(...)):
     )
     incident["location"]=latest_location
     incident["route"]=location_history
+    print("\n========== AI INPUT ==========")
 
+    print("Transcript:", transcription)
+
+    print("Matched Keywords:", keyword_result["matched"])
+
+    print("Keyword Score:", score)
+
+    print("Risk:", risk)
+
+    print("Scream:", scream_result)
+
+    print("==============================\n")
     try:
 
         ai_result = analyze_complete_incident(incident)
@@ -151,7 +166,22 @@ async def detect_voice(file: UploadFile = File(...)):
         }
 
         trigger_sos = ai_decision["triggerSOS"]
-
+        if trigger_sos:
+            try:
+                requests.post(
+                    "http://localhost:3001/api/sos/trigger",
+                    json={
+                        "triggerType": "AI",
+                        "transcription": transcription,
+                        "risk": risk,
+                        "location": latest_location
+                    },
+                    timeout=5
+                )
+                print("SOS sent to Notification Service")
+            except Exception as e:
+                print("Failed to notify Node backend")
+                print(e)
         incident_record = {
             "incidentId": str(uuid.uuid4()),
             "time": incident["time"],
@@ -317,10 +347,16 @@ def update_location(request: LocationRequest):
         request.longitude
     )
     
+    safe_zones = find_safe_zones(
+        request.latitude,
+        request.longitude,
+    )
+    
     latest_location={
         "latitude": request.latitude,
         "longitude": request.longitude,
-        "address": address
+        "address": address,
+        "safeZones": safe_zones
     }
     
     location_history.append([

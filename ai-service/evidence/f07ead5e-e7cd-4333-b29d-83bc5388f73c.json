@@ -1,0 +1,42 @@
+{
+    "incidentId": "f07ead5e-e7cd-4333-b29d-83bc5388f73c",
+    "time": "21:05",
+    "transcription": "Woooooooh!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.136,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.0701
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.0559
+            },
+            {
+                "label": "Shout",
+                "confidence": 0.01
+            }
+        ],
+        "topPrediction": "Speech",
+        "topConfidence": 0.2269
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "Detected scream and distress signals.",
+        "recommendedAction": "Immediately notify emergency contacts and police."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 90,
+        "reason": "Scream detection results and high distress score."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

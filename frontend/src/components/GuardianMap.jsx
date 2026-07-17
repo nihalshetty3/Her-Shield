@@ -43,6 +43,7 @@ export default function GuardianMap() {
 
     const [location, setLocation] = useState(null);
     const [route, setRoute] = useState([]);
+    const [safeZones , setSafeZones] = useState([]);
     const [isMapHovered, setIsMapHovered] = useState(false);
 
     async function load() {
@@ -56,6 +57,7 @@ export default function GuardianMap() {
             setLocation(data.location);
 
             setRoute(data.route || []);
+            safeZones(data.location?.safeZones || []);
 
         } catch (err) {
 
@@ -197,6 +199,33 @@ export default function GuardianMap() {
                             </Popup>
 
                         </Marker>
+
+                        {/* SAFE ZONES */}
+
+{safeZones.map((zone, index) => (
+
+<Marker
+    key={index}
+    position={[zone.latitude, zone.longitude]}
+>
+
+    <Popup>
+
+        <strong>{zone.name}</strong>
+
+        <br/>
+
+        {zone.type}
+
+        <br/>
+
+        {zone.distance} meters away
+
+    </Popup>
+
+</Marker>
+
+))}
 
                         {/* ROUTE */}
 

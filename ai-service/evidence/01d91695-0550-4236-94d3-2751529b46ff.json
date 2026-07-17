@@ -1,0 +1,31 @@
+{
+    "incidentId": "01d91695-0550-4236-94d3-2751529b46ff",
+    "time": "20:22",
+    "transcription": "Help help help help help help help",
+    "keywords": [
+        "help"
+    ],
+    "keywordScore": 10,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.549
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "Repeated cries for help indicate a potential emergency situation.",
+        "recommendedAction": "Immediately notify emergency contacts and monitor the situation closely."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 80,
+        "reason": "The transcription contains multiple instances of the keyword 'help', and the calculated risk is HIGH."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

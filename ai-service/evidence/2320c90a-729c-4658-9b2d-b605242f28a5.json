@@ -1,0 +1,29 @@
+{
+    "incidentId": "2320c90a-729c-4658-9b2d-b605242f28a5",
+    "time": "20:05",
+    "transcription": "H\u00e4lp, h\u00e4lp, h\u00e4lp, h\u00e4lp.",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "LOW",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.6496
+    },
+    "analysis": {
+        "incidentType": "Non-emergency",
+        "risk": "LOW",
+        "summary": "Received repeated call for help that might not be an emergency.",
+        "recommendedAction": "Monitor the situation and take appropriate action if necessary."
+    },
+    "aiDecision": {
+        "triggerSOS": false,
+        "confidence": 20,
+        "reason": "Transcription contains repeated calls for help but no distress keywords or scream detection."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": false
+    }
+}

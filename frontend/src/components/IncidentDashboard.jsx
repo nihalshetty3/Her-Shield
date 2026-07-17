@@ -1,31 +1,42 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function IncidentDashboard() {
+
     const [data, setData] = useState(null);
+    const [safeZones, setSafeZones] = useState([]);
 
     async function loadDashboard() {
+
         const res = await fetch("http://localhost:8000/dashboard");
         const json = await res.json();
+
         setData(json);
+
+        setSafeZones(
+            json.location?.safeZones || []
+        );
     }
+
     useEffect(() => {
+
         loadDashboard();
 
         const timer = setInterval(loadDashboard, 2000);
+
         return () => clearInterval(timer);
+
     }, []);
 
     if (!data) {
         return <div>Loading...</div>;
     }
+
     return (
 
         <div className="bg-zinc-900 rounded-2xl p-8">
 
             <h1 className="text-3xl font-bold mb-8">
-
                 ACTIVE INCIDENT
-
             </h1>
 
             <div className="grid grid-cols-2 gap-5">
@@ -59,9 +70,7 @@ export default function IncidentDashboard() {
             <div className="mt-8">
 
                 <h2 className="text-xl font-bold">
-
                     AI Summary
-
                 </h2>
 
                 <p>{data.summary}</p>
@@ -71,12 +80,65 @@ export default function IncidentDashboard() {
             <div className="mt-8">
 
                 <h2 className="text-xl font-bold">
-
                     Recommended Action
-
                 </h2>
 
                 <p>{data.recommendedAction}</p>
+
+            </div>
+
+            {/* Safe Zones */}
+
+            <div className="mt-8">
+
+                <h2 className="text-xl font-bold mb-4">
+                    Nearby Safe Zones
+                </h2>
+
+                {
+                    safeZones.length === 0 ? (
+
+                        <p className="text-zinc-400">
+                            No safe zones nearby.
+                        </p>
+
+                    ) : (
+
+                        <div className="space-y-3">
+
+                            {safeZones.map((zone, index) => (
+
+                                <div
+                                    key={index}
+                                    className="bg-zinc-800 rounded-xl p-4"
+                                >
+
+                                    <div className="font-semibold text-green-400">
+
+                                        {zone.name}
+
+                                    </div>
+
+                                    <div className="text-sm text-zinc-300">
+
+                                        {zone.type}
+
+                                    </div>
+
+                                    <div className="text-sm text-zinc-400">
+
+                                        {zone.distance} meters away
+
+                                    </div>
+
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                    )
+                }
 
             </div>
 
@@ -96,11 +158,15 @@ export default function IncidentDashboard() {
                         >
 
                             <p className="text-[#c026d3] font-semibold">
+
                                 {item.time}
+
                             </p>
 
                             <p className="text-white">
+
                                 {item.event}
+
                             </p>
 
                         </div>
@@ -114,7 +180,9 @@ export default function IncidentDashboard() {
         </div>
 
     );
+
 }
+
 function Card({ title, value }) {
 
     return (
