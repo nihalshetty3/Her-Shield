@@ -1,0 +1,31 @@
+{
+    "incidentId": "76939d2e-5751-44f0-9f94-eb0b87968c2a",
+    "time": "20:41",
+    "transcription": "help help help help help",
+    "keywords": [
+        "help"
+    ],
+    "keywordScore": 10,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.7733
+    },
+    "analysis": {
+        "incidentType": "Repeated Distress Calls",
+        "risk": "HIGH",
+        "summary": "Repeated calls for help indicate a potential emergency.",
+        "recommendedAction": "Immediately notify emergency contacts and assess the situation."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 80,
+        "reason": "Repeated use of the keyword 'help' and high calculated risk."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

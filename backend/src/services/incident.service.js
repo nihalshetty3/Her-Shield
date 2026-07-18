@@ -5,7 +5,8 @@ const VALID_TRIGGERS = [
     "manual",
     "shake",
     "voice",
-    "wearable"
+    "wearable",
+    "AI"
 ];
 
 const createIncident = (triggerType ,latitude , longitude) =>{

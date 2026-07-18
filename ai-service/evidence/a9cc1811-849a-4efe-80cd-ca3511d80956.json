@@ -1,0 +1,42 @@
+{
+    "incidentId": "a9cc1811-849a-4efe-80cd-ca3511d80956",
+    "time": "20:50",
+    "transcription": "AAAAAH!!",
+    "keywords": [],
+    "keywordScore": 0,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": true,
+        "distressScore": 0.5171,
+        "matchedLabels": [
+            {
+                "label": "Screaming",
+                "confidence": 0.2762
+            },
+            {
+                "label": "Wail, moan",
+                "confidence": 0.1313
+            },
+            {
+                "label": "Groan",
+                "confidence": 0.1096
+            }
+        ],
+        "topPrediction": "Screaming",
+        "topConfidence": 0.2762
+    },
+    "analysis": {
+        "incidentType": "Possible Distress Call",
+        "risk": "HIGH",
+        "summary": "User made a loud distress call.",
+        "recommendedAction": "Immediately notify emergency contacts and local authorities."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 90,
+        "reason": "Scream detection, high distress score."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

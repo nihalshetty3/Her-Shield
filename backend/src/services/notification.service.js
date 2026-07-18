@@ -2,13 +2,16 @@ const SMSService = require("./sms.service");
 const CallService = require("./call.service");
 const sendEmergencyAlert = async (incident) => {
 
-    console.log("\n========== NOTIFICATION SERVICE ==========");
+    console.log("========== NOTIFICATION SERVICE ==========");
+    console.log(incident);
 
     await SMSService.sendSMS(incident);
-    
-    await CallService.makeEmergencyCall(incident);
+    console.log("SMS Done");
 
-    console.log("==========================================\n");
+    await CallService.makeEmergencyCall(incident);
+    console.log("Call Done");
+
+    console.log("==========================================");
 
 };
 

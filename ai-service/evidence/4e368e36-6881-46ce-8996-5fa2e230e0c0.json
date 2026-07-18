@@ -1,0 +1,31 @@
+{
+    "incidentId": "4e368e36-6881-46ce-8996-5fa2e230e0c0",
+    "time": "21:08",
+    "transcription": "Help. Help.",
+    "keywords": [
+        "help"
+    ],
+    "keywordScore": 10,
+    "risk": "HIGH",
+    "screamDetection": {
+        "isScream": false,
+        "distressScore": 0.0,
+        "matchedLabels": [],
+        "topPrediction": "Speech",
+        "topConfidence": 0.6179
+    },
+    "analysis": {
+        "incidentType": "Possible Distress",
+        "risk": "HIGH",
+        "summary": "The user requested help twice.",
+        "recommendedAction": "Immediately check on the user and notify emergency contacts."
+    },
+    "aiDecision": {
+        "triggerSOS": true,
+        "confidence": 80,
+        "reason": "The user repeatedly asked for help."
+    },
+    "fakeSOSDetection": {
+        "isEmergency": true
+    }
+}

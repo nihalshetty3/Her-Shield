@@ -1,16 +1,18 @@
 COMMAND_SCORES = {
-
     "help":10,
-    "help me":10,
-    "save me":10,
-    "emergency":10,
-    "danger":8,
-    "leave me":9,
-    "don't touch me":10,
-    "someone help":10,
-    "stop":5,
-    "please":2
-
+    "help me":12,
+    "save me":15,
+    "please help":12,
+    "someone help":12,
+    "call police":15,
+    "don't touch me":18,
+    "leave me":15,
+    "stop":8,
+    "no":5,
+    "please":3,
+    "emergency":20,
+    "danger":15,
+    "scream":20
 }
 
 def detect_keywords(text):

@@ -32,24 +32,76 @@ Format:
 
 Rules:
 
-- If the transcription contains emergency words like
-  "help", "save me", "danger", "please help",
-  increase confidence.
+Rules:
 
-- If screamDetection.isScream is true,
-  strongly increase confidence.
+SAFETY HAS THE HIGHEST PRIORITY.
 
-- If risk is HIGH,
-  strongly consider triggering SOS.
+Trigger SOS if ANY of the following are true:
 
-- If the transcription clearly indicates
-  a joke, movie, testing, or accidental trigger,
-  classify it as NOT an emergency.
+1. A scream is detected.
+2. The transcription contains words like:
+   help, help me, save me, somebody help, don't touch me,
+   leave me alone, stop, emergency, danger, police.
+3. The calculated risk is HIGH or CRITICAL.
+4. The user repeatedly asks for help.
+5. The user sounds frightened, panicked, or distressed.
+6. There is uncertainty but the situation may involve physical danger.
+
+Only classify the incident as NOT an emergency when there is strong evidence that it is a test, joke, movie dialogue, or an explicit practice recording.
+
+When uncertain, ALWAYS prioritize user safety.
+
+Repeated cries for help should ALWAYS be treated as a real emergency.
 
 Return ONLY JSON.
 Do not include markdown.
 Do not include explanations.
+
+Examples
+
+Example 1
+
+Transcript:
+Help! Help! Please save me!
+
+Scream Detection:
+False
+
+Risk:
+CRITICAL
+
+Output:
+
+{
+"isEmergency": true,
+"triggerSOS": true,
+"confidence": 99,
+"risk":"CRITICAL",
+"incidentType":"Possible Assault"
+}
+
+Example 2
+
+Transcript:
+Testing the microphone.
+
+Scream Detection:
+False
+
+Risk:
+LOW
+
+Output:
+
+{
+"isEmergency": false,
+"triggerSOS": false,
+"confidence":99,
+"risk":"LOW",
+"incidentType":"Test Recording"
+}
 """
+
 
 
 def analyze_complete_incident(incident):
