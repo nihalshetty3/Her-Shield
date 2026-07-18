@@ -13,7 +13,7 @@ const triggerSOS = async (req, res) => {
         const latitude = location?.latitude;
         const longitude = location?.longitude;
 
-        const incident = IncidentService.createIncident(
+        const incident = await IncidentService.createIncident(
             triggerType,
             latitude,
             longitude
