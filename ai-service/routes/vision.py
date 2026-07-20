@@ -1,4 +1,6 @@
 from fastapi import APIRouter , UploadFile , File , Form
+from services.vision_service import analyze_image
+import tempfile
 
 router = APIRouter(
     prefix="/vision",
@@ -11,11 +13,11 @@ async def analyze(
     incidentId: str = Form(...)
 ):
     
-    contents = await image.read()
-    print("Received", len(contents), "bytes")
+    with tempfile.NamedTemporaryFile(delete=False , suffix=".jpeg") as temp:
+        temp.write(await image.read())
+        path = temp.name
+        
+    result = analyze_image(path)
+    result["incidentId"]=incidentId
     
-    return {
-        "incidentId": incidentId,
-        "riskScore": 0,
-        "description": "Analysis Pending"
-    }
+    return result

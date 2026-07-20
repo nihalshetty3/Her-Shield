@@ -2,6 +2,8 @@ from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from routes.vision import router as vision_router
+from dotenv import load_dotenv
+load_dotenv()
 
 app=FastAPI()
 app.include_router(vision_router)
