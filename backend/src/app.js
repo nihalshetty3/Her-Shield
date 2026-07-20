@@ -17,6 +17,6 @@ app.get("/" , (req, res) => {
 });
 app.use("/api/sos", sosRoutes);
 app.use("/api/audio",audioRoutes);
-
+app.use("/api/vision", require("./routes/vision/routes"));
 
 module.exports = app;
