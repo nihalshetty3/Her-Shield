@@ -1,8 +1,12 @@
 from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-app=FastAPI()
+from routes.vision import router as vision_router
+from dotenv import load_dotenv
+load_dotenv()
 
+app=FastAPI()
+app.include_router(vision_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -36,6 +40,7 @@ from services.pdf_service import create_pdf
 from services.shake_service import detect_shake
 from services.geocoding_service import reverse_geocode
 from services.safe_zone_service import find_safe_zones
+
 
 from utils.audio_convertor import prepare_audio
 
